@@ -3,12 +3,10 @@
 session_start();
 
 $config = require_once('../config.php');
-require_once '../MasterController.php';
 
-require_once '../Comment.php';
-require_once '../User.php';
-require_once '../Story.php';
-require_once '../Index.php';
+set_include_path(get_include_path() . ":" . realpath('..'));
 
-$framework = new MasterController($config);
+require_once('Upvote/Library/Front/Controller.php');
+
+$framework = new Upvote\Library\Front\Controller($config);
 echo $framework->execute();
