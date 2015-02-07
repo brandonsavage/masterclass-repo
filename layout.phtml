@@ -50,7 +50,8 @@
                 if(isset($_SESSION['AUTHENTICATED'])) {
                     print '<a href="/story/create">new</a> | <a href="/user/account">account</a> | <a href="/user/logout">logout</a>';
                 } else {
-                    print '<a href="/user/login">login</a>';
+                    print '<a href="/user/login">login</a> | ';
+                    print '<a href="/user/create">create account</a>';
                 }
                 ?>    
                     
