@@ -1,0 +1,12 @@
+{
+    "name": "jsposato/masterclass-repo",
+    "description": "Master Class Project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "John Sposato",
+            "email": "jsposato@gmail.com"
+        }
+    ],
+    "require": {}
+}
