@@ -1,12 +1,40 @@
 <?php
 
-class Story {
-    
-    public function __construct($config) {
-        $dbconfig = $config['database'];
-        $dsn = 'mysql:host=' . $dbconfig['host'] . ';dbname=' . $dbconfig['name'];
-        $this->db = new PDO($dsn, $dbconfig['user'], $dbconfig['pass']);
-        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+namespace Jsposato\Controller;
+
+use Jsposato\Model\Story as StoryModel;
+use Jsposato\Model\Comment as CommentModel;
+
+class StoryController {
+
+    /**
+     * @var StoryModel
+     */
+    protected $storyModel;
+
+    /**
+     * @var CommentModel
+     */
+    protected $commentModel;
+
+    /**
+     * @var PDO
+     */
+    protected $db;
+
+    /**
+     * @var
+     */
+    private $arrStory;
+
+    /**
+     * @var
+     */
+    private $comments;
+
+    public function __construct(StoryModel $story, CommentModel $comment) {
+        $this->storyModel = $story;
+        $this->commentModel = $comment;
     }
     
     public function index() {
@@ -14,27 +42,19 @@ class Story {
             header("Location: /");
             exit;
         }
-        
-        $story_sql = 'SELECT * FROM story WHERE id = ?';
-        $story_stmt = $this->db->prepare($story_sql);
-        $story_stmt->execute(array($_GET['id']));
-        if($story_stmt->rowCount() < 1) {
+
+        $this->arrStory = $this->storyModel->getOneStory($_GET['id']);
+        if(count($this->arrStory) < 1) {
             header("Location: /");
             exit;
         }
-        
-        $story = $story_stmt->fetch(PDO::FETCH_ASSOC);
-        
-        $comment_sql = 'SELECT * FROM comment WHERE story_id = ?';
-        $comment_stmt = $this->db->prepare($comment_sql);
-        $comment_stmt->execute(array($story['id']));
-        $comment_count = $comment_stmt->rowCount();
-        $comments = $comment_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $this->comments = $this->commentModel->getComments($_GET['id']);
 
         $content = '
-            <a class="headline" href="' . $story['url'] . '">' . $story['headline'] . '</a><br />
-            <span class="details">' . $story['created_by'] . ' | ' . $comment_count . ' Comments | 
-            ' . date('n/j/Y g:i a', strtotime($story['created_on'])) . '</span>
+            <a class="headline" href="' . $this->arrStory['url'] . '">' . $this->arrStory['headline'] . '</a><br />
+            <span class="details">' . $this->arrStory['created_by'] . ' | ' . $this->comments['count'] . ' Comments |
+            ' . date('n/j/Y g:i a', strtotime($this->arrStory['created_on'])) . '</span>
         ';
         
         if(isset($_SESSION['AUTHENTICATED'])) {
@@ -47,15 +67,15 @@ class Story {
             ';
         }
         
-        foreach($comments as $comment) {
+        foreach($this->comments as $comment) {
             $content .= '
                 <div class="comment"><span class="comment_details">' . $comment['created_by'] . ' | ' .
-                date('n/j/Y g:i a', strtotime($story['created_on'])) . '</span>
+                date('n/j/Y g:i a', strtotime($this->arrStory['created_on'])) . '</span>
                 ' . $comment['comment'] . '</div>
             ';
         }
         
-        require_once 'layout.phtml';
+        require_once '../layout.phtml';
         
     }
     
@@ -71,15 +91,7 @@ class Story {
                !filter_input(INPUT_POST, 'url', FILTER_VALIDATE_URL)) {
                 $error = 'You did not fill in all the fields or the URL did not validate.';       
             } else {
-                $sql = 'INSERT INTO story (headline, url, created_by, created_on) VALUES (?, ?, ?, NOW())';
-                $stmt = $this->db->prepare($sql);
-                $stmt->execute(array(
-                   $_POST['headline'],
-                   $_POST['url'],
-                   $_SESSION['username'],
-                ));
-                
-                $id = $this->db->lastInsertId();
+                $id = $this->storyModel->createStory($_POST['headline'], $_POST['url'], $_SESSION['username']);
                 header("Location: /story/?id=$id");
                 exit;
             }
@@ -95,7 +107,7 @@ class Story {
             </form>
         ';
         
-        require_once 'layout.phtml';
+        require_once '../layout.phtml';
     }
     
 }

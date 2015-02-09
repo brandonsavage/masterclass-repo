@@ -1,14 +1,15 @@
 <?php
 
-class User {
+namespace Jsposato\Controller;
+
+use PDO;
+
+class UserController {
     
     public $db;
     
-    public function __construct($config) {
-        $dbconfig = $config['database'];
-        $dsn = 'mysql:host=' . $dbconfig['host'] . ';dbname=' . $dbconfig['name'];
-        $this->db = new PDO($dsn, $dbconfig['user'], $dbconfig['pass']);
-        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    public function __construct(PDO $pdo) {
+        $this->db = $pdo;
     }
     
     public function create() {
@@ -69,7 +70,7 @@ class User {
             </form>
         ';
         
-        require_once 'layout.phtml';
+        require_once '../layout.phtml';
         
     }
     
@@ -114,7 +115,7 @@ class User {
             <input type="submit" name="updatepw" value="Create User" />
         </form>';
         
-        require_once 'layout.phtml';
+        require_once '../layout.phtml';
     }
     
     public function login() {
@@ -149,7 +150,7 @@ class User {
             </form>
         ';
         
-        require_once('layout.phtml');
+        require_once( '../layout.phtml' );
         
     }
     

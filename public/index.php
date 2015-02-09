@@ -2,13 +2,15 @@
 
 session_start();
 
-$config = require_once('../config.php');
-require_once '../MasterController.php';
+$path = realpath( __DIR__ . '/..');
 
-require_once '../Comment.php';
-require_once '../User.php';
-require_once '../Story.php';
-require_once '../Index.php';
+$config = require_once $path . '/config/config.php';
 
-$framework = new MasterController($config);
+require_once $path . '/vendor/autoload.php';
+
+require_once( '../config/diconfig.php' );
+
+require '../services.php';
+
+$framework = $di->newInstance('Jsposato\MasterController');
 echo $framework->execute();
