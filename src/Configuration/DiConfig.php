@@ -13,7 +13,7 @@ class DiConfig extends Config
         $db = $config['database'];
 
         $dsn = 'mysql:host=' . $db['host'] . ';dbname=' . $db['name'];
-echo $dsn;
+
         $di->params['Jsposato\Dbal\AbstractDB'] = [
             'dsn' => $dsn,
             'user' => $db['user'],

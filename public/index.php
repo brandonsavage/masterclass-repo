@@ -6,8 +6,6 @@ $path = realpath( __DIR__ . '/..');
 
 require_once $path . '/vendor/autoload.php';
 
-//require '../services.php';
-
 $config = function() use ($path) {
     return require($path . '/config/config.php');
 };
