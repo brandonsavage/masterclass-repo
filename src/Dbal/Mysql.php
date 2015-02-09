@@ -43,7 +43,7 @@ class Mysql extends AbstractDb
     public function fetchAll($sql, array $bind = []) {
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($bind);
-        return $stmt->fetch();
+        return $stmt->fetchAll();
     }
 
     /**

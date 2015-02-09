@@ -4,6 +4,8 @@ namespace Jsposato\Model;
 
 use Jsposato\Dbal\AbstractDb;
 
+use PDO;
+
 class Story
 {
     /**
