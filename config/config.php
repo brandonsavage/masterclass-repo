@@ -10,7 +10,7 @@ return array(
     ),
     
     'routes' => array(
-        '/' => ['class' => 'Jsposato\Controller\Index:index', 'type' => 'GET'],
+        '/' => ['class' => 'Jsposato\Controller\IndexController:index', 'type' => 'GET'],
         '/story' => ['class' => 'Jsposato\Controller\StoryController:index', 'type' => 'GET'],
         '/story/create' => ['class' => 'Jsposato\Controller\StoryController:create', 'type' => 'GET'],
         '/story/create/save' => ['class' => 'Jsposato\Controller\StoryController:create', 'type' => 'POST'],

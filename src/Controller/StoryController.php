@@ -59,7 +59,7 @@ class StoryController {
         
         if(isset($_SESSION['AUTHENTICATED'])) {
             $content .= '
-            <form method="post" action="/comment/create">
+            <form method="post" action="/comment/create/save">
             <input type="hidden" name="story_id" value="' . $_GET['id'] . '" />
             <textarea cols="60" rows="6" name="comment"></textarea><br />
             <input type="submit" name="submit" value="Submit Comment" />
@@ -92,7 +92,7 @@ class StoryController {
                 $error = 'You did not fill in all the fields or the URL did not validate.';       
             } else {
                 $id = $this->storyModel->createStory($_POST['headline'], $_POST['url'], $_SESSION['username']);
-                header("Location: /story/?id=$id");
+                header("Location: /story?id=$id");
                 exit;
             }
         }
