@@ -2,13 +2,9 @@
 
 session_start();
 
-$config = require_once('../config.php');
-require_once '../src/MasterController.php';
+require '../vendor/autoload.php';
 
-require_once '../src/Comment.php';
-require_once '../src/User.php';
-require_once '../src/Story.php';
-require_once '../src/Index.php';
+$config = require_once('../config.php');
 
 $framework = new MasterController($config);
 echo $framework->execute();
