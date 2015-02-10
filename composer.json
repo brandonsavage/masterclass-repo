@@ -1,0 +1,23 @@
+{
+    "name": "lynxtdc/oop",
+    "description": "Master OOP Class work",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Paul McGrane",
+            "email": "service@lynxtdc.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "aura/di": "~2.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.4"
+    },
+    "autoload":{
+        "psr-4": {
+            "Masterclass\\" : "src/"
+        }
+    }
+}

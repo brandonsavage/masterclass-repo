@@ -1,4 +1,7 @@
 <?php
+
+namespace Masterclass\Controller;
+use PDO;
  
 class Index {
     
@@ -36,7 +39,7 @@ class Index {
         
         $content .= '</ol>';
         
-        require 'layout.phtml';
+        require '../layout.phtml';
     }
 }
 

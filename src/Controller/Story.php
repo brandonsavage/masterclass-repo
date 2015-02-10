@@ -1,5 +1,8 @@
 <?php
 
+namespace Masterclass\Controller;
+use PDO;
+
 class Story {
     
     public function __construct($config) {
@@ -55,7 +58,7 @@ class Story {
             ';
         }
         
-        require_once 'layout.phtml';
+        require_once '../layout.phtml';
         
     }
     
@@ -95,7 +98,7 @@ class Story {
             </form>
         ';
         
-        require_once 'layout.phtml';
+        require_once '../layout.phtml';
     }
     
 }
