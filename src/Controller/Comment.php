@@ -1,5 +1,8 @@
 <?php
 
+namespace Masterclass\Controller;
+use PDO;
+
 class Comment {
     
     public function __construct($config) {

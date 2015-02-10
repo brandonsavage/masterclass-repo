@@ -1,4 +1,7 @@
 <?php
+
+namespace Masterclass\Controller;
+use PDO;
  
 class Index {
     

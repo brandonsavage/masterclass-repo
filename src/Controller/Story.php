@@ -1,5 +1,8 @@
 <?php
 
+namespace Masterclass\Controller;
+use PDO;
+
 class Story {
     
     public function __construct($config) {

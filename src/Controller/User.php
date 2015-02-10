@@ -1,5 +1,8 @@
 <?php
 
+namespace Masterclass\Controller;
+use PDO;
+
 class User {
     
     public $db;
