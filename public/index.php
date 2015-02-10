@@ -2,13 +2,16 @@
 
 session_start();
 
-$config = require_once('../config.php');
-require_once '../MasterController.php';
+$path = realpath( __DIR__ . '/..');
 
-require_once '../Comment.php';
-require_once '../User.php';
-require_once '../Story.php';
-require_once '../Index.php';
+require_once $path . '/vendor/autoload.php';
 
-$framework = new MasterController($config);
+$config = function() use ($path) {
+    return require($path . '/config/config.php');
+};
+
+$diContainerBuilder = new Aura\Di\ContainerBuilder();
+$di = $diContainerBuilder->newInstance(['config' => $config], ['Jsposato\Configuration\DiConfig', 'Jsposato\Configuration\RouterConfig']);
+
+$framework = $di->newInstance('Jsposato\MasterController');
 echo $framework->execute();

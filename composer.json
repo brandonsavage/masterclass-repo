@@ -1,0 +1,24 @@
+{
+    "name": "jsposato/masterclass-repo",
+    "description": "Master Class Project",
+    "license": "MIT",
+    "authors": [
+        {
+            "email": "jsposato@gmail.com",
+            "name": "John Sposato"
+        }
+    ],
+    "require": {
+        "aura/di": "~2.1",
+        "aura/web": "~2.0",
+        "aura/view": "~2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Jsposato\\": "src/"
+        }
+    }
+}
