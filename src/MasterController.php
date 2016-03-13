@@ -3,7 +3,6 @@
 namespace Masterclass;
 
 use Aura\Di\Container;
-use PDO;
 
 class MasterController
 {
@@ -33,14 +32,7 @@ class MasterController
 
     private function _determineControllers()
     {
-        if (isset($_SERVER['REDIRECT_BASE'])) {
-            $rb = $_SERVER['REDIRECT_BASE'];
-        } else {
-            $rb = '';
-        }
-
-        $ruri = $_SERVER['REQUEST_URI'];
-        $path = str_replace($rb, '', $ruri);
+        $path = $_SERVER['REQUEST_URI'];
         $return = array();
 
         foreach ($this->config['routes'] as $k => $v) {
@@ -48,18 +40,11 @@ class MasterController
             $pattern = '$' . $k . '$';
             if (preg_match($pattern, $path, $matches)) {
                 $controller_details = $v;
-                $path_string = array_shift($matches);
-                $arguments = $matches;
                 $controller_method = explode('/', $controller_details);
                 $return = array('call' => $controller_method);
             }
         }
 
         return $return;
-    }
-
-    private function _setupConfig($config)
-    {
-        $this->config = $config;
     }
 }
