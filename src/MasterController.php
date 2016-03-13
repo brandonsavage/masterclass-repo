@@ -21,18 +21,9 @@ class MasterController
     {
         $call = $this->_determineControllers();
 
-        $dbconfig = $this->config['database'];
-        $dsn = 'mysql:host=' . $dbconfig['host'] . ';dbname=' . $dbconfig['name'];
-        $pdo = new PDO($dsn, $dbconfig['user'], $dbconfig['pass']);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        // need this:
-//        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
         $call_class = $call['call'];
         $class = ucfirst(array_shift($call_class));
         $method = array_shift($call_class);
-//        $o = new $class($pdo);
 
         // container can instantiate class w/ required dependencies.
         $o = $this->container->newInstance($class);

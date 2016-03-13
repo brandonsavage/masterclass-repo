@@ -26,11 +26,11 @@ class Request
 
     public function getQueryParam($paramName)
     {
-        return $this->get[$paramName] ?? null;
+        return is_string($paramName) ? $this->get[$paramName] ?? null : null;
     }
 
     public function getPostParam($paramName)
     {
-        return $this->post[$paramName] ?? null;
+        return is_string($paramName) ? $this->post[$paramName] ?? null : null;
     }
 }

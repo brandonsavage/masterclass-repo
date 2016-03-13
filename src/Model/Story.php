@@ -6,29 +6,25 @@
 
 namespace Masterclass\Model;
 
-use PDO;
+use Masterclass\Db\Interfaces\DataStore;
 
 final class Story
 {
-    protected $pdo;
+    protected $dataStore;
 
-    public function __construct(PDO $pdo)
+    public function __construct(DataStore $dataStore)
     {
-        $this->pdo = $pdo;
+        $this->dataStore = $dataStore;
     }
 
     public function getAllStories()
     {
         $sql = 'SELECT * FROM story ORDER BY created_on DESC';
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute();
-        $stories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stories = $this->dataStore->fetchAll($sql);
 
         foreach ($stories as $k => $story) {
             $comment_sql = 'SELECT count(*) as `count` FROM comment WHERE story_id = ?';
-            $comment_stmt = $this->pdo->prepare(($comment_sql));
-            $comment_stmt->execute([$story['id']]);
-            $count = $comment_stmt->fetch(PDO::FETCH_ASSOC);
+            $count = $this->dataStore->fetchOne($comment_sql, [$story['id']]);
             $stories[$k]['count'] = $count['count'];
         }
 
@@ -38,25 +34,22 @@ final class Story
     public function loadStoryById($storyId)
     {
         $story_sql = 'SELECT * FROM story WHERE id = ?';
-        $story_stmt = $this->pdo->prepare($story_sql);
-        $story_stmt->execute([$storyId]);
 
-        return $story_stmt->fetch(PDO::FETCH_ASSOC);
+        return $this->dataStore->fetchOne($story_sql, [$storyId]);
     }
 
     public function createStory($headline, $url, $username)
     {
         $sql = 'INSERT INTO story (headline, url, created_by, created_on) VALUES (?, ?, ?, NOW())';
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([
-            $headline,
-            $url,
-            $username,
-        ]);
+        $this->dataStore->save(
+            $sql,
+            [
+                $headline,
+                $url,
+                $username,
+            ]
+        );
 
-        return $this->pdo->lastInsertId();
+        return $this->dataStore->lastInsertId();
     }
 }
-
-
-// composer require aura/di

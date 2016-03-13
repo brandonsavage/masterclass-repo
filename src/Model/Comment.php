@@ -2,39 +2,34 @@
 
 namespace Masterclass\Model;
 
-use PDO;
+use Masterclass\Db\Interfaces\DataStore;
 
 final class Comment
 {
-    protected $pdo;
-    protected $errors = [];
     protected $storyId;
-    protected $comment;
+    protected $dataStore;
 
-    public function __construct(PDO $pdo)
+    public function __construct(DataStore $dataStore)
     {
-        $this->pdo = $pdo;
+        $this->dataStore = $dataStore;
     }
 
     public function addComment($username, $storyId, $comment)
     {
         $sql = 'INSERT INTO comment (created_by, created_on, story_id, comment) VALUES (?, NOW(), ?, ?)';
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([
-            $username,
-            $storyId,
-            $comment,
-        ]);
+        $this->dataStore->save(
+            $sql,
+            [
+                $username,
+                $storyId,
+                $comment,
+            ]
+        );
     }
 
     public function getCommentsForStoryId($storyId)
     {
-        $comment_sql = 'SELECT * FROM comment WHERE story_id = ?';
-        $comment_stmt = $this->pdo->prepare($comment_sql);
-        $comment_stmt->execute([$storyId]);
-        $comment_count = $comment_stmt->rowCount();
-        $comments = $comment_stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        return $comments;
+        $sql = 'SELECT * FROM comment WHERE story_id = ?';
+        return $this->dataStore->fetchAll($sql, [$storyId]);
     }
 }

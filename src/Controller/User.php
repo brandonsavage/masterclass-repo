@@ -22,7 +22,7 @@ class User
         $error = null;
 
         // Do the create
-        if ($this->request->getPostParam(['create'])) {
+        if ($this->request->getPostParam('create')) {
 
             $username = $this->request->getPostParam('username');
             $password = $this->request->getPostParam('password'); $_POST['password'];

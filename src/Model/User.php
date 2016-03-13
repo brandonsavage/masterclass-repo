@@ -2,18 +2,20 @@
 
 namespace Masterclass\Model;
 
-use PDO;
+use Masterclass\Db\Interfaces\DataStore;
+
 
 final class User
 {
-    protected $pdo;
+    protected $dataStore;
     protected $errors = [];
     protected $username;
     protected $email;
+    protected $hashedPassword;
 
-    public function __construct(PDO $pdo)
+    public function __construct(DataStore $dataStore)
     {
-        $this->pdo = $pdo;
+        $this->dataStore = $dataStore;
     }
 
     /**
@@ -24,10 +26,7 @@ final class User
     public function userExists($username)
     {
         $check_sql = 'SELECT * FROM user WHERE username = ?';
-        $check_stmt = $this->pdo->prepare($check_sql);
-        $check_stmt->execute([$username]);
-
-        return (bool) $check_stmt->rowCount();
+        return (bool) $this->dataStore->rowCount($check_sql, [$username]);
 //            $error = 'Your chosen username already exists. Please choose another.';
     }
 
@@ -41,17 +40,17 @@ final class User
     public function loadUserByUsername($username)
     {
         $check_sql = 'SELECT * FROM user WHERE username = ?';
-        $check_stmt = $this->pdo->prepare($check_sql);
-        $check_stmt->execute([$username]);
 
-        if ($check_stmt->rowCount() == 0) {
+        // @todo: double query, here and line ~48.
+        if (!$this->userExists($username)) {
             throw new \Exception('User not found');
         }
 
-        $row = $check_stmt->fetch(PDO::FETCH_ASSOC);
+        $row = $this->dataStore->fetchOne($check_sql, [$username]);
 
         $this->username = $username;
         $this->email = $row['email'];
+        $this->hashedPassword = $row['password'];
 
         return $this;
     }
@@ -74,31 +73,38 @@ final class User
      */
     public function checkCredentials($username, $password)
     {
-        $password = md5($username . $password); // THIS IS NOT SECURE. DO NOT USE IN PRODUCTION.
-        $sql = 'SELECT * FROM user WHERE username = ? AND password = ? LIMIT 1';
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$username, $password]);
+//        $password = md5($username . $password); // THIS IS NOT SECURE. DO NOT USE IN PRODUCTION.
+//        $sql = 'SELECT * FROM user WHERE username = ? AND password = ? LIMIT 1';
 
-        return (bool) $stmt->rowCount();
+        $this->loadUserByUsername($username);
+
+        return password_verify($password, $this->hashedPassword);
     }
 
     public function createUser($username, $email, $password)
     {
+        $this->setPassword($password);
         $params = [
             $username,
             $email,
-            md5($username . $password),
+            $this->hashedPassword,
         ];
         $sql = 'INSERT INTO user (username, email, password) VALUES (?, ?, ?)';
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($params);
+        $this->dataStore->save($sql, $params);
     }
 
     public function updatePassword($username, $password)
     {
-        $password = md5($username . $password);
+        $this->setPassword($password);
         $sql = 'UPDATE user SET password = ? WHERE username = ?';
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$password, $username]);
+        $this->dataStore->save($sql, [$this->hashedPassword, $username]);
+    }
+
+    protected function setPassword($password)
+    {
+        if (empty($password)) {
+            throw new \Exception('Password is required');
+        }
+        $this->hashedPassword = password_hash($password, PASSWORD_BCRYPT);
     }
 }

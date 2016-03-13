@@ -18,6 +18,10 @@ $di->params['PDO'] = [
     ],
 ];
 
+$di->params[Masterclass\Db\Mysql::class] = [
+    'pdo' => $di->lazyNew('PDO'),
+];
+
 $di->params[Masterclass\Request::class] = [
     'post' => $_POST,
     'get' => $_GET,
@@ -28,7 +32,7 @@ $di->params[Masterclass\Controller\Index::class] = [
 ];
 
 $di->params[Masterclass\Model\Story::class] = [
-    'pdo' => $di->lazyNew('PDO'),
+    'dataStore' => $di->lazyNew(Masterclass\Db\Mysql::class),
 ];
 
 $di->params[Masterclass\Controller\User::class] = [
@@ -37,7 +41,7 @@ $di->params[Masterclass\Controller\User::class] = [
 ];
 
 $di->params[Masterclass\Model\User::class] = [
-    'pdo' => $di->lazyNew('PDO'),
+    'dataStore' => $di->lazyNew(Masterclass\Db\Mysql::class),
 ];
 
 $di->params[Masterclass\Controller\Comment::class] = [
@@ -46,7 +50,7 @@ $di->params[Masterclass\Controller\Comment::class] = [
 ];
 
 $di->params[Masterclass\Model\Comment::class] = [
-    'pdo' => $di->lazyNew('PDO'),
+    'dataStore' => $di->lazyNew(Masterclass\Db\Mysql::class),
 ];
 $di->params[Masterclass\Controller\Story::class] = [
     'story' => $di->lazyNew(Masterclass\Model\Story::class),
