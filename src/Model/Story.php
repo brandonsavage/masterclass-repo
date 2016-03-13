@@ -35,6 +35,27 @@ final class Story
         return $stories;
     }
 
+    public function loadStoryById($storyId)
+    {
+        $story_sql = 'SELECT * FROM story WHERE id = ?';
+        $story_stmt = $this->pdo->prepare($story_sql);
+        $story_stmt->execute([$storyId]);
+
+        return $story_stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function createStory($headline, $url, $username)
+    {
+        $sql = 'INSERT INTO story (headline, url, created_by, created_on) VALUES (?, ?, ?, NOW())';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            $headline,
+            $url,
+            $username,
+        ]);
+
+        return $this->pdo->lastInsertId();
+    }
 }
 
 
