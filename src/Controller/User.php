@@ -3,15 +3,18 @@
 namespace Masterclass\Controller;
 
 use Masterclass\Model\User as UserModel;
+use Masterclass\Request;
 
 class User
 {
 
-    public $userModel;
+    protected $userModel;
+    protected $request;
 
-    public function __construct(UserModel $model)
+    public function __construct(UserModel $model, Request $request)
     {
         $this->userModel = $model;
+        $this->request = $request;
     }
 
     public function create()
@@ -19,11 +22,12 @@ class User
         $error = null;
 
         // Do the create
-        if (isset($_POST['create'])) {
-            $username = $_POST['username'];
-            $password = $_POST['password'];
-            $passwordCheck = $_POST['password_check'];
-            $email = $_POST['email'];
+        if ($this->request->getPostParam(['create'])) {
+
+            $username = $this->request->getPostParam('username');
+            $password = $this->request->getPostParam('password'); $_POST['password'];
+            $passwordCheck = $this->request->getPostParam('password_check');
+            $email = $this->request->getPostParam('email');
 
             if (empty($username)
                 || empty($email)

@@ -18,6 +18,11 @@ $di->params['PDO'] = [
     ],
 ];
 
+$di->params[Masterclass\Request::class] = [
+    'post' => $_POST,
+    'get' => $_GET,
+];
+
 $di->params[Masterclass\Controller\Index::class] = [
     'model' => $di->lazyNew(Masterclass\Model\Story::class),
 ];
@@ -28,6 +33,7 @@ $di->params[Masterclass\Model\Story::class] = [
 
 $di->params[Masterclass\Controller\User::class] = [
     'model' => $di->lazyNew(Masterclass\Model\User::class),
+    'request' => $di->lazyNew(Masterclass\Request::class),
 ];
 
 $di->params[Masterclass\Model\User::class] = [
@@ -36,6 +42,7 @@ $di->params[Masterclass\Model\User::class] = [
 
 $di->params[Masterclass\Controller\Comment::class] = [
     'comment' => $di->lazyNew(Masterclass\Model\Comment::class),
+    'request' => $di->lazyNew(Masterclass\Request::class),
 ];
 
 $di->params[Masterclass\Model\Comment::class] = [
@@ -44,4 +51,5 @@ $di->params[Masterclass\Model\Comment::class] = [
 $di->params[Masterclass\Controller\Story::class] = [
     'story' => $di->lazyNew(Masterclass\Model\Story::class),
     'comment' => $di->lazyNew(Masterclass\Model\Comment::class),
+    'request' => $di->lazyNew(Masterclass\Request::class),
 ];

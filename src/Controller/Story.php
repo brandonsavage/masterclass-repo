@@ -4,33 +4,37 @@ namespace Masterclass\Controller;
 
 use Masterclass\Model\Comment;
 use Masterclass\Model\Story as StoryModel;
+use Masterclass\Request;
 
 class Story
 {
     protected $comment;
     protected $story;
+    protected $request;
 
-    public function __construct(Comment $comment, StoryModel $story)
+    public function __construct(Comment $comment, StoryModel $story, Request $request)
     {
         $this->comment = $comment;
         $this->story = $story;
+        $this->request = $request;
     }
 
     public function index()
     {
-        if (!isset($_GET['id'])) {
+        $id = $this->request->getQueryParam('id');
+        if (!$id) {
             header("Location: /");
             exit;
         }
 
-        $story = $this->story->loadStoryById($_GET['id']);
+        $story = $this->story->loadStoryById($id);
 
         if (empty($story)) {
             header("Location: /");
             exit;
         }
 
-        $comments = $this->comment->getCommentsForStoryId($_GET['id']);
+        $comments = $this->comment->getCommentsForStoryId($id);
         $comment_count = count($comments);
 
         $content = '
