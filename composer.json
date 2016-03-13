@@ -1,5 +1,13 @@
 {
     "require-dev": {
         "laravel/homestead": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Masterclass\\": ["./src"]
+        }
+    },
+    "require": {
+        "aura/di": "^2.2"
     }
 }
