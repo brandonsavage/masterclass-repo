@@ -29,6 +29,7 @@ $di->params[Masterclass\Request::class] = [
     'get' => $_GET,
     'server' => $_SERVER,
 ];
+$di->set('request', $di->lazyNew(Masterclass\Request::class));
 
 $di->params[Masterclass\Controller\Index::class] = [
     'model' => $di->lazyNew(Masterclass\Model\Story::class),
@@ -40,7 +41,7 @@ $di->params[Masterclass\Model\Story::class] = [
 
 $di->params[Masterclass\Controller\User::class] = [
     'model' => $di->lazyNew(Masterclass\Model\User::class),
-    'request' => $di->lazyNew(Masterclass\Request::class),
+    'request' => $di->get('request'),
 ];
 
 $di->params[Masterclass\Model\User::class] = [
@@ -49,7 +50,7 @@ $di->params[Masterclass\Model\User::class] = [
 
 $di->params[Masterclass\Controller\Comment::class] = [
     'comment' => $di->lazyNew(Masterclass\Model\Comment::class),
-    'request' => $di->lazyNew(Masterclass\Request::class),
+    'request' => $di->get('request'),
 ];
 
 $di->params[Masterclass\Model\Comment::class] = [
@@ -58,7 +59,7 @@ $di->params[Masterclass\Model\Comment::class] = [
 $di->params[Masterclass\Controller\Story::class] = [
     'story' => $di->lazyNew(Masterclass\Model\Story::class),
     'comment' => $di->lazyNew(Masterclass\Model\Comment::class),
-    'request' => $di->lazyNew(Masterclass\Request::class),
+    'request' => $di->get('request'),
 ];
 
 $di->params[Masterclass\RouteMap::class] = [
@@ -76,5 +77,5 @@ $di->params[Masterclass\RouteMap::class] = [
         $r->addRoute('POST', '/user/login', Controller\User::class . ':login');
         $r->addRoute('GET', '/user/logout', Controller\User::class . ':logout');
     }),
-    'request' => $di->lazyNew(Masterclass\Request::class),
+    'request' => $di->get('request'),
 ];
