@@ -1,0 +1,29 @@
+<html>
+<head>
+    <title>Upvote News</title>
+</head>
+<link rel="stylesheet" href="/resources/styles/style.css">
+<body>
+<div id="container">
+    <div id="main">
+        <div id="header">
+            <a href="/"><strong>Upvote News</strong></a>
+            <?php
+
+            if (isset($_SESSION['AUTHENTICATED'])) {
+                print '<a href="/story/create">new</a> | <a href="/user/account">account</a> | <a href="/user/logout">logout</a>';
+            } else {
+                print '<a href="/user/login">login</a> | ';
+                print '<a href="/user/create">create account</a>';
+            }
+            ?>
+
+        </div>
+
+        <div id="content">
+            <?php echo $content; ?>
+        </div>
+    </div>
+</div>
+</body>
+</html>
