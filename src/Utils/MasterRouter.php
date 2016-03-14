@@ -17,13 +17,11 @@ class MasterRouter
 
     /**
      * MasterRouter constructor.
-     * @param array $config
-     * @param array $routes
      */
-    public function __construct(array $config = [], array $routes = [])
+    public function __construct()
     {
-        $this->setupConfig($config);
-        $this->setupRoutes($routes);
+        $this->setupConfig();
+        $this->setupRoutes();
     }
 
     /**
@@ -70,18 +68,18 @@ class MasterRouter
     }
 
     /**
-     * @param $config
+     * Setup the default config
      */
-    private function setupConfig($config)
+    private function setupConfig()
     {
-        $this->config = $config;
+        $this->config = require_once __BASE_DIR__.'config.php';
     }
 
     /**
-     * @param $routes
+     * Setup the default routes
      */
-    private function setupRoutes($routes)
+    private function setupRoutes()
     {
-        $this->routes = $routes;
+        $this->routes = require_once __BASE_DIR__.'routes.php';
     }
 }
