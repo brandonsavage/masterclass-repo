@@ -1,5 +1,7 @@
 <?php
 
+use Masterclass\Controller;
+
 $di = new Aura\Di\Container(new \Aura\Di\Factory());
 
 $di->setAutoResolve(false);
@@ -25,6 +27,7 @@ $di->params[Masterclass\Db\Mysql::class] = [
 $di->params[Masterclass\Request::class] = [
     'post' => $_POST,
     'get' => $_GET,
+    'server' => $_SERVER,
 ];
 
 $di->params[Masterclass\Controller\Index::class] = [
@@ -55,5 +58,23 @@ $di->params[Masterclass\Model\Comment::class] = [
 $di->params[Masterclass\Controller\Story::class] = [
     'story' => $di->lazyNew(Masterclass\Model\Story::class),
     'comment' => $di->lazyNew(Masterclass\Model\Comment::class),
+    'request' => $di->lazyNew(Masterclass\Request::class),
+];
+
+$di->params[Masterclass\RouteMap::class] = [
+    'dispatcher' => FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
+        $r->addRoute('GET', '/', Controller\Index::class . ':index');
+        $r->addRoute('GET', '/story/[{id:\d+}]', Controller\Story::class . ':index');
+        $r->addRoute('GET', '/story/create', Controller\Story::class . ':create');
+        $r->addRoute('POST', '/story/create', Controller\Story::class . ':create');
+        $r->addRoute('POST', '/comment/create', Controller\Comment::class . ':create');
+        $r->addRoute('GET', '/user/create', Controller\User::class . ':create');
+        $r->addRoute('POST', '/user/create', Controller\User::class . ':create');
+        $r->addRoute('GET', '/user/account', Controller\User::class . ':account');
+        $r->addRoute('POST', '/user/account', Controller\User::class . ':account');
+        $r->addRoute('GET', '/user/login', Controller\User::class . ':login');
+        $r->addRoute('POST', '/user/login', Controller\User::class . ':login');
+        $r->addRoute('GET', '/user/logout', Controller\User::class . ':logout');
+    }),
     'request' => $di->lazyNew(Masterclass\Request::class),
 ];

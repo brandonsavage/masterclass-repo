@@ -3,6 +3,7 @@
 namespace Masterclass;
 
 use Aura\Di\Container;
+use FastRoute\Dispatcher;
 
 class MasterController
 {
@@ -18,33 +19,13 @@ class MasterController
 
     public function execute()
     {
-        $call = $this->_determineControllers();
+        $routeMap = $this->container->newInstance(RouteMap::class);
+        $dispatchDetail = $routeMap->handle();
 
-        $call_class = $call['call'];
-        $class = ucfirst(array_shift($call_class));
-        $method = array_shift($call_class);
+        $controller = $this->container->newInstance($dispatchDetail['class']);
+        $method = $dispatchDetail['method'];
+        $vars = $dispatchDetail['vars'];
 
-        // container can instantiate class w/ required dependencies.
-        $o = $this->container->newInstance($class);
-
-        return $o->$method();
-    }
-
-    private function _determineControllers()
-    {
-        $path = $_SERVER['REQUEST_URI'];
-        $return = array();
-
-        foreach ($this->config['routes'] as $k => $v) {
-            $matches = array();
-            $pattern = '$' . $k . '$';
-            if (preg_match($pattern, $path, $matches)) {
-                $controller_details = $v;
-                $controller_method = explode('/', $controller_details);
-                $return = array('call' => $controller_method);
-            }
-        }
-
-        return $return;
+        return $controller->$method($vars);
     }
 }
