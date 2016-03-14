@@ -2,7 +2,6 @@
 
 namespace Masterclass\Utils;
 
-
 use Masterclass\Exceptions\BadViewDataException;
 
 class View
@@ -13,19 +12,19 @@ class View
      * @return mixed
      * @throws BadViewDataException
      */
-    public static function make($__view__, $__data__=[])
+    public static function make($__view__, $__data__ = [])
     {
         $__view__ = str_replace('.', '/', $__view__);
-        if(strrpos($__view__, '.phtml', -strlen('.phtml')) === false){
-            $__view__ = $__view__.'.phtml';
+        if (strrpos($__view__, '.phtml', -strlen('.phtml')) === false) {
+            $__view__ = $__view__ . '.phtml';
         }
         extract($__data__, EXTR_SKIP);
-        foreach($__data__ as $__key__=> $__value__){
-            if(!isset($$__key__)){
+        foreach ($__data__ as $__key__ => $__value__) {
+            if (!isset($$__key__)) {
                 throw new BadViewDataException('You can\'t have a variable named ' . $__key__);
             }
         }
-        require_once __DIR__ . '/../Views/' . $__view__;
+        require_once __BASE_DIR__ . 'src/Views/' . $__view__;
     }
 
 }
