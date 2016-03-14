@@ -1,14 +1,12 @@
 <?php
 
+use Masterclass\Utils\MasterRouter;
+
+define('__BASE_DIR__', dirname(__DIR__) . '/');
+
 session_start();
 
-$config = require_once('../config.php');
-require_once '../MasterController.php';
+require_once '../vendor/autoload.php';
 
-require_once '../Comment.php';
-require_once '../User.php';
-require_once '../Story.php';
-require_once '../Index.php';
-
-$framework = new MasterController($config);
+$framework = new MasterRouter();
 echo $framework->execute();
