@@ -1,6 +1,8 @@
 <?php
 
-class MasterController {
+namespace Masterclass;
+
+class FrontController {
     
     private $config;
     

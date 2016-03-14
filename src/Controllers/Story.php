@@ -1,8 +1,15 @@
 <?php
 
+namespace Masterclass\Controllers;
+use PDO;
+
 class Story {
-    
+
+    protected $db;
+    protected $config;
+
     public function __construct($config) {
+        $this->config = $config;
         $dbconfig = $config['database'];
         $dsn = 'mysql:host=' . $dbconfig['host'] . ';dbname=' . $dbconfig['name'];
         $this->db = new PDO($dsn, $dbconfig['user'], $dbconfig['pass']);
@@ -54,8 +61,8 @@ class Story {
                 ' . $comment['comment'] . '</div>
             ';
         }
-        
-        require_once 'layout.phtml';
+
+        require $this->config['path'].'/layout.phtml';
         
     }
     
@@ -94,8 +101,8 @@ class Story {
                 <input type="submit" name="create" value="Create" />
             </form>
         ';
-        
-        require_once 'layout.phtml';
+
+        require $this->config['path'].'/layout.phtml';
     }
     
 }

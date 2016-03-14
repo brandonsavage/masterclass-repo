@@ -1,5 +1,19 @@
 {
+    "name": "lofye/masterclass-repo",
+    "authors": [
+        {
+            "name": "Derek Martin",
+            "email": "derek@geekunity.com"
+        }
+    ],
+    "require": {},
     "require-dev": {
-        "laravel/homestead": "^3.0"
+        "laravel/homestead": "^3.0",
+        "phpunit/phpunit": "~4.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Masterclass\\": "src/"
+        }
     }
 }
