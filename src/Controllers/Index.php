@@ -1,22 +1,16 @@
 <?php
+
+namespace Masterclass\Controllers;
+use Masterclass\Utils\View;
  
-class Index {
-    
-    protected $db;
-    
-    public function __construct($config) {
-        $dbconfig = $config['database'];
-        $dsn = 'mysql:host=' . $dbconfig['host'] . ';dbname=' . $dbconfig['name'];
-        $this->db = new PDO($dsn, $dbconfig['user'], $dbconfig['pass']);
-        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    }
+class Index extends Controller{
     
     public function index() {
         
         $sql = 'SELECT * FROM story ORDER BY created_on DESC';
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
-        $stories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stories = $stmt->fetchAll();
         
         $content = '<ol>';
         
@@ -24,7 +18,7 @@ class Index {
             $comment_sql = 'SELECT COUNT(*) as `count` FROM comment WHERE story_id = ?';
             $comment_stmt = $this->db->prepare($comment_sql);
             $comment_stmt->execute(array($story['id']));
-            $count = $comment_stmt->fetch(PDO::FETCH_ASSOC);
+            $count = $comment_stmt->fetch();
             $content .= '
                 <li>
                 <a class="headline" href="' . $story['url'] . '">' . $story['headline'] . '</a><br />
@@ -36,7 +30,9 @@ class Index {
         
         $content .= '</ol>';
         
-        require 'layout.phtml';
+        View::make('layout', [
+            'content' => $content
+        ]);
     }
 }
 
