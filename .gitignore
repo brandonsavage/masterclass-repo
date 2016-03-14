@@ -2,3 +2,4 @@ Homestead.yaml
 vendor/
 config.php
 .vagrant
+.idea
