@@ -61,8 +61,10 @@ class Apc implements DataStore
     }
 
     /**
-     * @TODO - this should invalidate the corresponding select cache
-     * set default to 60 second ttl to compensate.
+     * This should invalidate the corresponding select cache.
+     * First, I set default store to 60 second ttl to compensate.
+     * Then, I decided to invalidate all cache upon an update.
+     * Certainly, a better solution must exist.
      *
      * @param $sql
      * @param array $args
@@ -71,8 +73,8 @@ class Apc implements DataStore
      */
     public function update($sql, array $args = [])
     {
+        apc_clear_cache('user');
         return $this->db->update($sql, $args);
-        // @todo
     }
 
     public function lastInsertId()

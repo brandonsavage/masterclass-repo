@@ -41,7 +41,7 @@ final class Story
     public function createStory($headline, $url, $username)
     {
         $sql = 'INSERT INTO story (headline, url, created_by, created_on) VALUES (?, ?, ?, NOW())';
-        $this->dataStore->save(
+        $this->dataStore->insert(
             $sql,
             [
                 $headline,

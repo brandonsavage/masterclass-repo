@@ -10,8 +10,7 @@ require ('../diconfig.php');
 /**
  * @var \Masterclass\RouteMap $routeMap
  */
-$routeMap = $this->container->newInstance(Masterclass\RouteMap::class);
+$routeMap = $di->newInstance(Masterclass\RouteMap::class);
 $destination = $routeMap->handle();
-
 $framework = new Masterclass\MasterController($di, $config, $destination);
 echo $framework->execute();

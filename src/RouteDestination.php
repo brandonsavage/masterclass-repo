@@ -10,9 +10,11 @@ class RouteDestination
     protected $method;
     protected $args;
 
-    public function __construct(array $routeInfo)
+    public function __construct($class, $method, $args)
     {
-        extract($routeInfo);
+        $this->class = $class;
+        $this->method = $method;
+        $this->args = $args;
     }
 
     public function getClass()

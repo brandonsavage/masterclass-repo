@@ -73,9 +73,6 @@ final class User
      */
     public function checkCredentials($username, $password)
     {
-//        $password = md5($username . $password); // THIS IS NOT SECURE. DO NOT USE IN PRODUCTION.
-//        $sql = 'SELECT * FROM user WHERE username = ? AND password = ? LIMIT 1';
-
         $this->loadUserByUsername($username);
 
         return password_verify($password, $this->hashedPassword);
@@ -90,14 +87,14 @@ final class User
             $this->hashedPassword,
         ];
         $sql = 'INSERT INTO user (username, email, password) VALUES (?, ?, ?)';
-        $this->dataStore->save($sql, $params);
+        $this->dataStore->insert($sql, $params);
     }
 
     public function updatePassword($username, $password)
     {
         $this->setPassword($password);
         $sql = 'UPDATE user SET password = ? WHERE username = ?';
-        $this->dataStore->save($sql, [$this->hashedPassword, $username]);
+        $this->dataStore->update($sql, [$this->hashedPassword, $username]);
     }
 
     protected function setPassword($password)

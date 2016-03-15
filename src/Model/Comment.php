@@ -17,7 +17,7 @@ final class Comment
     public function addComment($username, $storyId, $comment)
     {
         $sql = 'INSERT INTO comment (created_by, created_on, story_id, comment) VALUES (?, NOW(), ?, ?)';
-        $this->dataStore->save(
+        $this->dataStore->insert(
             $sql,
             [
                 $username,
