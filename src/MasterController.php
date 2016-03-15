@@ -7,25 +7,23 @@ use FastRoute\Dispatcher;
 
 class MasterController
 {
-    private $config;
-
+    protected $config;
     protected $container;
+    protected $destination;
 
-    public function __construct(Container $container, $config)
+    public function __construct(Container $container, $config, RouteDestination $destination)
     {
         $this->container = $container;
         $this->config = $config;
+        $this->destination = $destination;
     }
 
     public function execute()
     {
-        $routeMap = $this->container->newInstance(RouteMap::class);
-        $dispatchDetail = $routeMap->handle();
+        $controller = $this->container->newInstance($this->destination->getClass());
+        $method = $this->destination->getMethod();
+        $args = $this->destination->getArgs();
 
-        $controller = $this->container->newInstance($dispatchDetail['class']);
-        $method = $dispatchDetail['method'];
-        $vars = $dispatchDetail['vars'];
-
-        return $controller->$method($vars);
+        return $controller->$method($args);
     }
 }

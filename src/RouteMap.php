@@ -20,7 +20,9 @@ class RouteMap
         $this->request = $request;
     }
 
-
+    /**
+     * @return RouteDestination
+     */
     public function handle()
     {
 
@@ -47,11 +49,11 @@ class RouteMap
                 // ... call $handler with $vars
                 $class = $handler[0];
                 $method = $handler[1];
-                return [
+                return new RouteDestination([
                     'class' => $class,
                     'method' => $method,
-                    'vars' => $vars,
-                ];
+                    'args' => $vars,
+                ]);
                 break;
         }
 
