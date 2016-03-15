@@ -38,6 +38,7 @@ class RouteMap
                 $allowedMethods = $routeInfo[1];
                 // ... 405 Method Not Allowed
                 header("HTTP/1.1 405 Method Not Allowed");
+                header($allowedMethods);
                 exit;
                 break;
             case Dispatcher::FOUND:

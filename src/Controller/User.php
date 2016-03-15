@@ -38,7 +38,7 @@ class User
             }
 
             if (is_null($error)) {
-                if (!filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL)) {
+                if (!$this->request->validateEmail($email)) {
                     $error = 'Your email address is invalid';
                 }
             }
@@ -87,11 +87,13 @@ class User
         }
 
         $username = $_SESSION['username'];
-        $password = $_POST['password'] ?? null;
+        $password = $this->request->getPostParam('password') ?? null;
 
-        if (isset($_POST['updatepw'])) {
-            if (!isset($_POST['password']) || !isset($_POST['password_check']) ||
-                $_POST['password'] != $_POST['password_check']
+        if ($this->request->getPostParam('updatepw') !== null) {
+            $passwordCheck = $this->request->getPostParam('password_check');
+            if (empty($password)
+                || empty($passwordCheck)
+                || $password != $passwordCheck
             ) {
                 $error = 'The password fields were blank or they did not match. Please try again.';
             } else {
@@ -124,8 +126,8 @@ class User
         $error = null;
         // Do the login
         if (isset($_POST['login'])) {
-            $username = $_POST['user'];
-            $password = $_POST['pass'];
+            $username = $this->request->getPostParam('user');
+            $password = $this->request->getPostParam('pass');
 
             if ($this->userModel->checkCredentials($username, $password)) {
                 session_regenerate_id();

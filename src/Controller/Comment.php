@@ -19,8 +19,6 @@ class Comment
     public function create()
     {
         if (!isset($_SESSION['AUTHENTICATED'])) {
-            // @todo: die, redirect, exit... what is desired functionality?
-            die('not auth');
             header("Location: /");
             exit;
         }
@@ -28,7 +26,7 @@ class Comment
         $this->commentModel->addComment(
             $_SESSION['username'],
             $this->request->getPostParam('story_id'),
-            filter_input(INPUT_POST, 'comment', FILTER_SANITIZE_FULL_SPECIAL_CHARS)
+            $this->request->getSanitizedValue($this->request->getPostParam('comment'))
         );
 
         header("Location: /story/?id=" . $_POST['story_id']);

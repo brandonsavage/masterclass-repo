@@ -46,7 +46,7 @@ class Story
         if (isset($_SESSION['AUTHENTICATED'])) {
             $content .= '
             <form method="post" action="/comment/create">
-            <input type="hidden" name="story_id" value="' . $_GET['id'] . '" />
+            <input type="hidden" name="story_id" value="' . $id . '" />
             <textarea cols="60" rows="6" name="comment"></textarea><br />
             <input type="submit" name="submit" value="Submit Comment" />
             </form>            
@@ -73,13 +73,17 @@ class Story
         }
 
         $error = '';
-        if (isset($_POST['create'])) {
-            if (!isset($_POST['headline']) || !isset($_POST['url']) ||
-                !filter_input(INPUT_POST, 'url', FILTER_VALIDATE_URL)
+        if ($this->request->getPostParam('create') !== null) {
+            $headline = $this->request->getPostParam('headline');
+            $url = $this->request->getPostParam('url');
+
+            if (empty($headline)
+                || empty($url)
+                || !$this->request->validateUrl($url)
             ) {
                 $error = 'You did not fill in all the fields or the URL did not validate.';
             } else {
-                $id = $this->story->createStory($_POST['headline'], $_POST['url'], $_SESSION['username']);
+                $id = $this->story->createStory($headline, $url, $_SESSION['username']);
                 header("Location: /story/?id=$id");
                 exit;
             }

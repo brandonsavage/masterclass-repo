@@ -50,7 +50,14 @@ class Mysql implements DataStore
         return $statement->rowCount();
     }
 
-    public function save($sql, array $args = [])
+    public function insert($sql, array $args = [])
+    {
+        $statement = $this->pdo->prepare($sql, $args);
+
+        return $statement->execute($args);
+    }
+
+    public function update($sql, array $args = [])
     {
         $statement = $this->pdo->prepare($sql, $args);
 

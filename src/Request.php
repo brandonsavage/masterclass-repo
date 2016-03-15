@@ -45,4 +45,48 @@ class Request
     {
         return is_string($paramName) ? $this->server[$paramName] ?? null : null;
     }
+
+    /**
+     * @deprecated
+     *
+     * @TODO This may violate SRP.  Here for convenience temporarily.
+     *
+     * @param string $value
+     *
+     * @return mixed
+     */
+    public function getSanitizedValue(string $value)
+    {
+        // original:
+        // filter_input(INPUT_POST, 'comment', FILTER_SANITIZE_FULL_SPECIAL_CHARS)
+        return filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    }
+
+    /**
+     * @deprecated
+     *
+     * @TODO This may violate SRP.  Here for convenience temporarily.
+     *
+     * @param string $value
+     *
+     * @return bool
+     */
+    public function validateUrl(string $value)
+    {
+        return filter_var($value, FILTER_VALIDATE_URL) !== false;
+    }
+
+    /**
+     * @deprecated
+     *
+     * @TODO This may violate SRP.  Here for convenience temporarily.
+     *
+     * @param string $value
+     *
+     * @return bool
+     */
+    public function validateEmail(string $value)
+    {
+        return filter_var($value, FILTER_VALIDATE_EMAIL) !== false;
+    }
 }
