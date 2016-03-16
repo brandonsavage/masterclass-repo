@@ -2,7 +2,7 @@
 
 namespace Masterclass\Controller;
 
-use Masterclass\Model\Comment as CommentModel;
+use Masterclass\Model\CommentMysqlDataStore as CommentModel;
 use Masterclass\Request;
 
 class Comment

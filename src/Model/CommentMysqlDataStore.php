@@ -2,9 +2,10 @@
 
 namespace Masterclass\Model;
 
-use Masterclass\Db\Interfaces\DataStore;
+use Masterclass\Db\DataStore;
+use Masterclass\Domain\Story\CommentDataStore;
 
-final class Comment
+final class CommentMysqlDataStore implements CommentDataStore
 {
     protected $storyId;
     protected $dataStore;

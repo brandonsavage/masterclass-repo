@@ -1,7 +1,13 @@
 <?php
 
-namespace Masterclass\Db\Interfaces;
+namespace Masterclass\Db;
 
+/**
+ * Interface DataStore.
+ *
+ * @Todo: This is pretty tightly coupled to $sql. Reconsider.
+ *
+ */
 interface DataStore
 {
     public function fetchOne($sql, array $args = []);

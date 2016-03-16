@@ -1,14 +1,11 @@
 <?php
-/**
- * @author Adam Altman <adam@rebilly.com>
- * masterclass-repo
- */
 
 namespace Masterclass\Model;
 
-use Masterclass\Db\Interfaces\DataStore;
+use Masterclass\Db\DataStore;
+use Masterclass\Domain\Story\StoryDataStore;
 
-final class Story
+final class StoryMysqlDataStore implements StoryDataStore
 {
     protected $dataStore;
 
@@ -51,5 +48,16 @@ final class Story
         );
 
         return $this->dataStore->lastInsertId();
+    }
+
+    /**
+     * This could be a problem with concurrency.
+     * We could change to use a uuid4 snowflake as the id.
+     *
+     * @return mixed
+     */
+    public function getNextId()
+    {
+        return $this->dataStore->lastInsertId() + 1;
     }
 }

@@ -1,8 +1,10 @@
 <?php
 
 use Masterclass\Controller;
+use Aura\Di\Container;
+use Aura\Di\Factory;
 
-$di = new Aura\Di\Container(new \Aura\Di\Factory());
+$di = new Container(new Factory());
 
 $di->setAutoResolve(false);
 
@@ -32,33 +34,33 @@ $di->params[Masterclass\Request::class] = [
 $di->set('request', $di->lazyNew(Masterclass\Request::class));
 
 $di->params[Masterclass\Controller\Index::class] = [
-    'model' => $di->lazyNew(Masterclass\Model\Story::class),
+    'model' => $di->lazyNew(Masterclass\Model\StoryMysqlDataStore::class),
 ];
 
-$di->params[Masterclass\Model\Story::class] = [
+$di->params[Masterclass\Model\StoryMysqlDataStore::class] = [
     'dataStore' => $di->lazyNew(Masterclass\Db\Mysql::class),
 ];
 
 $di->params[Masterclass\Controller\User::class] = [
-    'model' => $di->lazyNew(Masterclass\Model\User::class),
+    'model' => $di->lazyNew(Masterclass\Model\UserMysqlDataStore::class),
     'request' => $di->get('request'),
 ];
 
-$di->params[Masterclass\Model\User::class] = [
+$di->params[Masterclass\Model\UserMysqlDataStore::class] = [
     'dataStore' => $di->lazyNew(Masterclass\Db\Mysql::class),
 ];
 
 $di->params[Masterclass\Controller\Comment::class] = [
-    'comment' => $di->lazyNew(Masterclass\Model\Comment::class),
+    'comment' => $di->lazyNew(Masterclass\Model\CommentMysqlDataStore::class),
     'request' => $di->get('request'),
 ];
 
-$di->params[Masterclass\Model\Comment::class] = [
+$di->params[Masterclass\Model\CommentMysqlDataStore::class] = [
     'dataStore' => $di->lazyNew(Masterclass\Db\Mysql::class),
 ];
 $di->params[Masterclass\Controller\Story::class] = [
-    'story' => $di->lazyNew(Masterclass\Model\Story::class),
-    'comment' => $di->lazyNew(Masterclass\Model\Comment::class),
+    'story' => $di->lazyNew(Masterclass\Model\StoryMysqlDataStore::class),
+    'comment' => $di->lazyNew(Masterclass\Model\CommentMysqlDataStore::class),
     'request' => $di->get('request'),
 ];
 

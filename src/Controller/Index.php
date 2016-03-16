@@ -2,14 +2,14 @@
 
 namespace Masterclass\Controller;
 
-use Masterclass\Model\Story;
+use Masterclass\Model\StoryMysqlDataStore;
 
 class Index
 {
     
     protected $model;
     
-    public function __construct(Story $model)
+    public function __construct(StoryMysqlDataStore $model)
     {
         $this->model = $model;
     }

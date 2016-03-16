@@ -2,7 +2,7 @@
 
 namespace Masterclass\Db;
 
-use Masterclass\Db\Interfaces\DataStore;
+use Masterclass\Db\DataStore;
 use PDO;
 
 class Mysql implements DataStore

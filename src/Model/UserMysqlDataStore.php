@@ -2,10 +2,10 @@
 
 namespace Masterclass\Model;
 
-use Masterclass\Db\Interfaces\DataStore;
+use Masterclass\Db\DataStore;
 
 
-final class User
+final class UserMysqlDataStore
 {
     protected $dataStore;
     protected $errors = [];

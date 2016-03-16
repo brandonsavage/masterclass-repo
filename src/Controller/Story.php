@@ -2,8 +2,8 @@
 
 namespace Masterclass\Controller;
 
-use Masterclass\Model\Comment;
-use Masterclass\Model\Story as StoryModel;
+use Masterclass\Model\CommentMysqlDataStore;
+use Masterclass\Model\StoryMysqlDataStore as StoryModel;
 use Masterclass\Request;
 
 class Story
@@ -12,7 +12,7 @@ class Story
     protected $story;
     protected $request;
 
-    public function __construct(Comment $comment, StoryModel $story, Request $request)
+    public function __construct(CommentMysqlDataStore $comment, StoryModel $story, Request $request)
     {
         $this->comment = $comment;
         $this->story = $story;

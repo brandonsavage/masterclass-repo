@@ -2,7 +2,7 @@
 
 namespace Masterclass\Controller;
 
-use Masterclass\Model\User as UserModel;
+use Masterclass\Model\UserMysqlDataStore as UserModel;
 use Masterclass\Request;
 
 class User
