@@ -1,7 +1,6 @@
 <?php
 namespace Masterclass\Controller;
 
-use PDO;
 use Masterclass\Model\Comment as Model_Comment;
 
 class Comment
@@ -12,9 +11,9 @@ class Comment
      */
     protected $comment_model;
 
-    public function __construct(PDO $db)
+    public function __construct(Model_Comment $comment_model)
     {
-        $this->comment_model = new Model_Comment($db);
+        $this->comment_model = $comment_model;
     }
 
     public function create()

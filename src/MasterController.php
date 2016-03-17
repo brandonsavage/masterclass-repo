@@ -1,16 +1,25 @@
 <?php
 namespace Masterclass;
 
+use Aura\Di\Container as Di_Container;
 use PDO;
 
 class MasterController
 {
+    /**
+     * @var array
+     */
+    protected $config;
 
-    private $config;
+    /**
+     * @var Di_Container
+     */
+    protected $container;
 
-    public function __construct($config)
+    public function __construct(Di_Container $container, $config)
     {
         $this->_setupConfig($config);
+        $this->container = $container;
     }
 
     public function execute()
@@ -20,13 +29,8 @@ class MasterController
         $class = ucfirst(array_shift($call_class));
         $method = array_shift($call_class);
 
-        $dbconfig = $this->config['database'];
-        $dsn = "mysql:host={$dbconfig['host']};dbname={$dbconfig['name']}";
-        $db = new PDO($dsn, $dbconfig['user'], $dbconfig['pass']);
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        $o = new $class($db);
-        return $o->$method();
+        $controller_object = $this->container->newInstance($class);
+        return $controller_object->$method();
     }
 
     private function _determineControllers()

@@ -8,5 +8,8 @@
         "psr-4" : {
             "Masterclass\\": "src/"
         }
+    },
+    "require": {
+        "aura/di": "^3.0"
     }
 }

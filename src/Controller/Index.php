@@ -1,7 +1,6 @@
 <?php
 namespace Masterclass\Controller;
 
-use PDO;
 use Masterclass\Model\Story as Model_Story;
 
 class Index
@@ -11,9 +10,9 @@ class Index
      */
     protected $story_model;
 
-    public function __construct(PDO $db)
+    public function __construct(Model_Story $story_model)
     {
-        $this->story_model = new Model_Story($db);
+        $this->story_model = $story_model;
     }
 
     public function index()

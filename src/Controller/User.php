@@ -1,7 +1,6 @@
 <?php
 namespace Masterclass\Controller;
 
-use PDO;
 use Masterclass\Model\User as Model_User;
 
 class User
@@ -11,9 +10,9 @@ class User
      */
     public $user_model;
 
-    public function __construct(PDO $db)
+    public function __construct(Model_User $user_model)
     {
-        $this->user_model = new Model_User($db);
+        $this->user_model = $user_model;
     }
 
     public function create()
