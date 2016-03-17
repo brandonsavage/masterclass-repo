@@ -2,15 +2,18 @@
 namespace Masterclass\Controller;
 
 use PDO;
+use Masterclass\Model\User as Model_User;
 
 class User
 {
-
-    public $db;
+    /**
+     * @var Model_User
+     */
+    public $user_model;
 
     public function __construct(PDO $db)
     {
-        $this->db = $db;
+        $this->user_model = new Model_User($db);
     }
 
     public function create()
@@ -38,24 +41,14 @@ class User
             }
 
             if (is_null($error)) {
-                $check_sql = 'SELECT * FROM user WHERE username = ?';
-                $check_stmt = $this->db->prepare($check_sql);
-                $check_stmt->execute(array($_POST['username']));
-                if ($check_stmt->rowCount() > 0) {
+                $user = $this->user_model->getUserByUsername($_POST['username']);
+                if (!empty($user)) {
                     $error = 'Your chosen username already exists. Please choose another.';
                 }
             }
 
             if (is_null($error)) {
-                $params = array(
-                    $_POST['username'],
-                    $_POST['email'],
-                    md5($_POST['username'] . $_POST['password']),
-                );
-
-                $sql = 'INSERT INTO user (username, email, password) VALUES (?, ?, ?)';
-                $stmt = $this->db->prepare($sql);
-                $stmt->execute($params);
+                $this->user_model->postNewUser($_POST['username'], $_POST['email'], $_POST['password']);
                 header("Location: /user/login");
                 exit;
             }
@@ -73,7 +66,7 @@ class User
             </form>
         ';
 
-        require_once __DIR__.'/../../layout.phtml';
+        require_once __DIR__ . '/../../layout.phtml';
 
     }
 
@@ -91,21 +84,12 @@ class User
             ) {
                 $error = 'The password fields were blank or they did not match. Please try again.';
             } else {
-                $sql = 'UPDATE user SET password = ? WHERE username = ?';
-                $stmt = $this->db->prepare($sql);
-                $stmt->execute(array(
-                    md5($_SESSION['username'] . $_POST['password']), // THIS IS NOT SECURE.
-                    $_SESSION['username'],
-                ));
+                $this->user_model->updatePassword($_SESSION['username'], $_POST['password']);
                 $error = 'Your password was changed.';
             }
         }
 
-        $dsql = 'SELECT * FROM user WHERE username = ?';
-        $stmt = $this->db->prepare($dsql);
-        $stmt->execute(array($_SESSION['username']));
-        $details = $stmt->fetch(PDO::FETCH_ASSOC);
-
+        $details = $this->user_model->getUserByUserName($_SESSION['username']);
         $content = '
         ' . $error . '<br />
         
@@ -119,7 +103,7 @@ class User
             <input type="submit" name="updatepw" value="Create User" />
         </form>';
 
-        require_once __DIR__.'/../../layout.phtml';
+        require_once __DIR__ . '/../../layout.phtml';
     }
 
     public function login()
@@ -129,12 +113,9 @@ class User
         if (isset($_POST['login'])) {
             $username = $_POST['user'];
             $password = $_POST['pass'];
+            $data = $this->user_model->getUserByUserName($username);
             $password = md5($username . $password); // THIS IS NOT SECURE. DO NOT USE IN PRODUCTION.
-            $sql = 'SELECT * FROM user WHERE username = ? AND password = ? LIMIT 1';
-            $stmt = $this->db->prepare($sql);
-            $stmt->execute(array($username, $password));
-            if ($stmt->rowCount() > 0) {
-                $data = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (!empty($data) && $data['password'] == $password) {
                 session_regenerate_id();
                 $_SESSION['username'] = $data['username'];
                 $_SESSION['AUTHENTICATED'] = true;
@@ -154,7 +135,7 @@ class User
             </form>
         ';
 
-        require_once(__DIR__.'/../../layout.phtml');
+        require_once(__DIR__ . '/../../layout.phtml');
 
     }
 

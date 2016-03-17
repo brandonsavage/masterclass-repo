@@ -2,13 +2,19 @@
 namespace Masterclass\Controller;
 
 use PDO;
+use Masterclass\Model\Comment as Model_Comment;
 
 class Comment
 {
 
+    /**
+     * @var Model_Comment
+     */
+    protected $comment_model;
+
     public function __construct(PDO $db)
     {
-        $this->db = $db;
+        $this->comment_model = new Model_Comment($db);
     }
 
     public function create()
@@ -19,13 +25,7 @@ class Comment
             exit;
         }
 
-        $sql = 'INSERT INTO comment (created_by, created_on, story_id, comment) VALUES (?, NOW(), ?, ?)';
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute(array(
-            $_SESSION['username'],
-            $_POST['story_id'],
-            filter_input(INPUT_POST, 'comment', FILTER_SANITIZE_FULL_SPECIAL_CHARS),
-        ));
+        $this->comment_model->postNewComment($_SESSION['username'], $_POST['story_id'], $_POST['comment']);
         header("Location: /story/?id=" . $_POST['story_id']);
     }
 
