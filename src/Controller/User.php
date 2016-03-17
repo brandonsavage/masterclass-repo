@@ -73,6 +73,10 @@ class User {
                 <input type="submit" name="create" value="Create User" />
             </form>
         ';
+
+
+
+
         
         require_once $this->config['path'] . '/layout.phtml';
         
@@ -116,7 +120,7 @@ class User {
                 ' . $error . '<br />
             <label>Password</label> <input type="password" name="password" value="" /><br />
             <label>Password Again</label> <input type="password" name="password_check" value="" /><br />
-            <input type="submit" name="updatepw" value="Create User" />
+            <input type="submit" name="updatepw" value="Update password" />
         </form>';
         
         require_once $this->config['path'] . '/layout.phtml';
@@ -154,7 +158,7 @@ class User {
             </form>
         ';
         
-        require_once('layout.phtml');
+        require_once($this->config['path'] . '/layout.phtml');
         
     }
     
