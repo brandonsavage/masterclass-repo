@@ -4,32 +4,32 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0c6a9e745553d91218f9db462eb53f79",
-    "content-hash": "5b408d8752825db7f7a94fb3d6e09aed",
+    "hash": "62cf0870c248c588fb35be498ef022c7",
+    "content-hash": "090d760593dd3b2a5f8d205f518e8459",
     "packages": [
         {
             "name": "aura/di",
-            "version": "3.0.0",
+            "version": "2.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/auraphp/Aura.Di.git",
-                "reference": "6eb1a27930103cb4eedd73456a3b9ca0d68efe41"
+                "reference": "81d5d9c602ca292a16e32001dcbd2adab5350e28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/auraphp/Aura.Di/zipball/6eb1a27930103cb4eedd73456a3b9ca0d68efe41",
-                "reference": "6eb1a27930103cb4eedd73456a3b9ca0d68efe41",
+                "url": "https://api.github.com/repos/auraphp/Aura.Di/zipball/81d5d9c602ca292a16e32001dcbd2adab5350e28",
+                "reference": "81d5d9c602ca292a16e32001dcbd2adab5350e28",
                 "shasum": ""
             },
             "require": {
-                "container-interop/container-interop": "~1.0",
-                "php": ">=5.5.0"
-            },
-            "require-dev": {
-                "acclimate/container": "~1.0",
-                "mouf/picotainer": "~1.0"
+                "php": ">=5.3.0"
             },
             "type": "library",
+            "extra": {
+                "aura": {
+                    "type": "library"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Aura\\Di\\": "src/"
@@ -37,7 +37,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "MIT"
+                "BSD-2-Clause"
             ],
             "authors": [
                 {
@@ -45,7 +45,7 @@
                     "homepage": "https://github.com/auraphp/Aura.Di/contributors"
                 }
             ],
-            "description": "A serializable dependency injection container with constructor and setter injection, interface and trait awareness, configuration inheritance, and much more.",
+            "description": "Provides a dependency injection container system with native support for constructor- and setter-based injection, lazy-loading of services, and inheritable configuration of setters and constructor params.",
             "homepage": "https://github.com/auraphp/Aura.Di",
             "keywords": [
                 "container",
@@ -54,34 +54,7 @@
                 "di",
                 "di container"
             ],
-            "time": "2016-03-14 15:31:55"
-        },
-        {
-            "name": "container-interop/container-interop",
-            "version": "1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/container-interop/container-interop.git",
-                "reference": "fc08354828f8fd3245f77a66b9e23a6bca48297e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/container-interop/container-interop/zipball/fc08354828f8fd3245f77a66b9e23a6bca48297e",
-                "reference": "fc08354828f8fd3245f77a66b9e23a6bca48297e",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Interop\\Container\\": "src/Interop/Container/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
-            "time": "2014-12-30 15:22:37"
+            "time": "2016-01-21 09:34:53"
         }
     ],
     "packages-dev": [

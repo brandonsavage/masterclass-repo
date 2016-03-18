@@ -25,7 +25,7 @@ class Comment
         }
 
         $this->comment_model->postNewComment($_SESSION['username'], $_POST['story_id'], $_POST['comment']);
-        header("Location: /story/?id=" . $_POST['story_id']);
+        header("Location: /story?id=" . $_POST['story_id']);
     }
 
 }

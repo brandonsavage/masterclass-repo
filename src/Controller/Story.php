@@ -81,13 +81,13 @@ class Story
                 $error = 'You did not fill in all the fields or the URL did not validate.';
             } else {
                 $id = $this->story_model->postStory($_SESSION['username'], $_POST['headline'], $_POST['url']);
-                header("Location: /story/?id=$id");
+                header("Location: /story?id=$id");
                 exit;
             }
         }
 
         $content = '
-            <form method="post">
+            <form method="post" action="/story/create/save">
                 ' . $error . '<br />
         
                 <label>Headline:</label> <input type="text" name="headline" value="" /> <br />

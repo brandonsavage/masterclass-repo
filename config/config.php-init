@@ -9,14 +9,18 @@ return array(
         'name' => '',
     ),
 
-    'routes' => array(
-        '' => 'Masterclass\Controller\Index/index',
-        'story' => 'Masterclass\Controller\Story/index',
-        'story/create' => 'Masterclass\Controller\Story/create',
-        'comment/create' => 'Masterclass\Controller\Comment/create',
-        'user/create' => 'Masterclass\Controller\User/create',
-        'user/account' => 'Masterclass\Controller\User/account',
-        'user/login' => 'Masterclass\Controller\User/login',
-        'user/logout' => 'Masterclass\Controller\User/logout',
-    ),
+    'routes' => [
+        '/' => ['class' => 'Masterclass\Controller\Index:index', 'type' => 'GET'],
+        '/story' => ['class' => 'Masterclass\Controller\Story:index', 'type' => 'GET'],
+        '/story/create' => ['class' => 'Masterclass\Controller\Story:create', 'type' => 'GET'],
+        '/story/create/save' => ['class' => 'Masterclass\Controller\Story:create', 'type' => 'POST'],
+        '/comment/create' => ['class' => 'Masterclass\Controller\Comment:create', 'type' => 'POST'],
+        '/user/create' => ['class' => 'Masterclass\Controller\User:create', 'type' => 'GET'],
+        '/user/account/create' => ['class' => 'Masterclass\Controller\User:create', 'type' => 'POST'],
+        '/user/account' => ['class' => 'Masterclass\Controller\User:account', 'type' => 'GET'],
+        '/user/account/save' => ['class' => 'Masterclass\Controller\User:account', 'type' => 'POST'],
+        '/user/login/check' => ['class' => 'Masterclass\Controller\User:login', 'type' => 'POST'],
+        '/user/login' => ['class' => 'Masterclass\Controller\User:login', 'type' => 'GET'],
+        '/user/logout' => ['class' => 'Masterclass\Controller\User:logout', 'type' => 'GET'],
+    ],
 );
