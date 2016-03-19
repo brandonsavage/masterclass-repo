@@ -10,6 +10,8 @@
         }
     },
     "require": {
-        "aura/di": "^2.2"
+        "aura/di": "~2.2",
+        "aura/web": "~2.0",
+        "aura/view": "~2.2"
     }
 }

@@ -23,4 +23,24 @@ return array(
         '/user/login' => ['class' => 'Masterclass\Controller\User:login', 'type' => 'GET'],
         '/user/logout' => ['class' => 'Masterclass\Controller\User:logout', 'type' => 'GET'],
     ],
+
+    'config_classes' => [
+        'Masterclass\Configuration\DiConfig',
+        'Masterclass\Configuration\RouterConfig',
+        'Masterclass\Configuration\View',
+        'Masterclass\Configuration\Web',
+    ],
+
+    'views' => [
+        'index' => __DIR__.'/../views/index.php',
+        'story' => __DIR__.'/../views/story.php',
+        'story_create' => __DIR__.'/../views/story_create.php',
+        'user_create' => __DIR__.'/../views/user_create.php',
+        'user_account' => __DIR__.'/../views/user_account.php',
+        'user_login' => __DIR__.'/../views/user_login.php',
+    ],
+
+    'layouts' => [
+        'layout' => __DIR__.'/../views/layout.php'
+    ],
 );

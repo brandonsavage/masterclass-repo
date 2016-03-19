@@ -32,17 +32,27 @@ class DiConfig extends Config
 
 
         $di->params['Masterclass\Controller\Index'] = [
-            'story_model' => $di->lazyNew('Masterclass\Model\Story')
+            'story_model' => $di->lazyNew('Masterclass\Model\Story'),
+            'response' => $di->lazyNew('Aura\Web\Response'),
+            'view' => $di->lazyNew('Aura\View\View'),
         ];
         $di->params['Masterclass\Controller\Comment'] = [
-            'comment_model' => $di->lazyNew('Masterclass\Model\Comment')
+            'comment_model' => $di->lazyNew('Masterclass\Model\Comment'),
+            'request' => $di->lazyNew('Aura\Web\Request'),
+            'response' => $di->lazyNew('Aura\Web\Response'),
         ];
         $di->params['Masterclass\Controller\Story'] = [
             'comment_model' => $di->lazyNew('Masterclass\Model\Comment'),
-            'story_model' => $di->lazyNew('Masterclass\Model\Story')
+            'story_model' => $di->lazyNew('Masterclass\Model\Story'),
+            'request' => $di->lazyNew('Aura\Web\Request'),
+            'response' => $di->lazyNew('Aura\Web\Response'),
+            'view' => $di->lazyNew('Aura\View\View'),
         ];
         $di->params['Masterclass\Controller\User'] = [
-            'user_model' => $di->lazyNew('Masterclass\Model\User')
+            'user_model' => $di->lazyNew('Masterclass\Model\User'),
+            'request' => $di->lazyNew('Aura\Web\Request'),
+            'response' => $di->lazyNew('Aura\Web\Response'),
+            'view' => $di->lazyNew('Aura\View\View'),
         ];
 
         $di->params['Masterclass\FrontController\MasterController'] = [

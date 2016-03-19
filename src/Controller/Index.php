@@ -2,6 +2,8 @@
 namespace Masterclass\Controller;
 
 use Masterclass\Model\Story as Model_Story;
+use Aura\View\View as Aura_View;
+use Aura\Web\Response as Web_Response;
 
 class Index
 {
@@ -10,29 +12,32 @@ class Index
      */
     protected $story_model;
 
-    public function __construct(Model_Story $story_model)
+    /** @var  Web_Response */
+    protected $response;
+
+    /** @var  Aura_View */
+    protected $view;
+
+    public function __construct(
+        Model_Story $story_model,
+        Web_Response $response,
+        Aura_View $view
+    )
     {
         $this->story_model = $story_model;
+        $this->response = $response;
+        $this->view = $view;
     }
 
     public function index()
     {
-        $content = '<ol>';
-
         $stories = $this->story_model->getAllStories();
-        foreach ($stories as $story) {
-            $content .= '
-                <li>
-                <a class="headline" href="' . $story['url'] . '">' . $story['headline'] . '</a><br />
-                <span class="details">' . $story['created_by'] . ' | <a href="/story?id=' . $story['id'] . '">' . $story['count'] . ' Comments</a> |
-                ' . date('n/j/Y g:i a', strtotime($story['created_on'])) . '</span>
-                </li>
-            ';
-        }
+        $this->view->setLayout('layout');
+        $this->view->setView('index');
 
-        $content .= '</ol>';
-
-        require __DIR__ . '/../../layout.phtml';
+        $this->view->setData(['stories' => $stories]);
+        $this->response->content->set($this->view->__invoke());
+        return $this->response;
     }
 }
 
