@@ -1,28 +1,29 @@
-require 'json'
-require 'yaml'
+## first install vagrant hostmanager:
+# `$ vagrant plugin install vagrant-hostmanager`
 
-VAGRANTFILE_API_VERSION ||= "2"
-confDir = $confDir ||= File.expand_path("vendor/laravel/homestead", File.dirname(__FILE__))
+$script = <<SCRIPT
+  echo I am provisioning...
+  date > vagrant_provisioned_at
+  echo I am setting up nginx vhost configuration ...
+  cp -rp /vagrant/masterclass.nginx.conf /etc/nginx/conf.d/
+  service nginx restart
+  echo web server is ready, access at http://dev.masterclass.com
+  echo mysql setup database dev
+  mysql -uroot -pvagrant -e 'CREATE DATABASE IF NOT EXISTS `dev` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci'
+  echo create initial mysql schema
+  mysql -uroot -pvagrant dev < /vagrant/schema.sql
+  echo Ready for mastery.
+SCRIPT
 
-homesteadYamlPath = "Homestead.yaml"
-homesteadJsonPath = "Homestead.json"
-afterScriptPath = "after.sh"
-aliasesPath = "aliases"
+Vagrant.configure(2) do |config|
+  config.vm.box = "rasmus/php7dev"
 
-require File.expand_path(confDir + '/scripts/homestead.rb')
+  config.vm.network "private_network", ip: "10.0.99.12"
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = true
+  config.hostmanager.aliases = 'dev.masterclass.com'
 
-Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-    if File.exists? aliasesPath then
-        config.vm.provision "file", source: aliasesPath, destination: "~/.bash_aliases"
-    end
+  config.vm.synced_folder ".", "/vagrant", owner: "vagrant", group: "www-data", mount_options: ['dmode=775']
 
-    if File.exists? homesteadYamlPath then
-        Homestead.configure(config, YAML::load(File.read(homesteadYamlPath)))
-    elsif File.exists? homesteadJsonPath then
-        Homestead.configure(config, JSON.parse(File.read(homesteadJsonPath)))
-    end
-
-    if File.exists? afterScriptPath then
-        config.vm.provision "shell", path: afterScriptPath
-    end
+  config.vm.provision "shell", inline: $script
 end

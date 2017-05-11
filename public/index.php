@@ -3,12 +3,14 @@
 session_start();
 
 $config = require_once('../config.php');
-require_once '../MasterController.php';
+require_once '../vendor/autoload.php';
 
-require_once '../Comment.php';
-require_once '../User.php';
-require_once '../Story.php';
-require_once '../Index.php';
+require ('../diconfig.php');
 
-$framework = new MasterController($config);
+/**
+ * @var \Masterclass\RouteMap $routeMap
+ */
+$routeMap = $di->newInstance(Masterclass\RouteMap::class);
+$destination = $routeMap->handle();
+$framework = new Masterclass\MasterController($di, $config, $destination);
 echo $framework->execute();

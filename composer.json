@@ -1,5 +1,14 @@
 {
+    "autoload": {
+        "psr-4": {
+            "Masterclass\\": ["./src"]
+        }
+    },
+    "require": {
+        "aura/di": "^2.2",
+        "nikic/fast-route": "^0.7.0"
+    },
     "require-dev": {
-        "laravel/homestead": "^3.0"
+        "phpunit/phpunit": "^5.2"
     }
 }
