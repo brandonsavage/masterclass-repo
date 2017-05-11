@@ -1,26 +1,29 @@
 <?php
- 
-class Index {
-    
+namespace Masterclass\Controller;
+
+use PDO;
+
+class Index
+{
+
     protected $db;
-    
-    public function __construct($config) {
-        $dbconfig = $config['database'];
-        $dsn = 'mysql:host=' . $dbconfig['host'] . ';dbname=' . $dbconfig['name'];
-        $this->db = new PDO($dsn, $dbconfig['user'], $dbconfig['pass']);
-        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    public function __construct(PDO $db)
+    {
+        $this->db = $db;
     }
-    
-    public function index() {
-        
+
+    public function index()
+    {
+
         $sql = 'SELECT * FROM story ORDER BY created_on DESC';
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         $stories = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
+
         $content = '<ol>';
-        
-        foreach($stories as $story) {
+
+        foreach ($stories as $story) {
             $comment_sql = 'SELECT COUNT(*) as `count` FROM comment WHERE story_id = ?';
             $comment_stmt = $this->db->prepare($comment_sql);
             $comment_stmt->execute(array($story['id']));
@@ -33,10 +36,10 @@ class Index {
                 </li>
             ';
         }
-        
+
         $content .= '</ol>';
-        
-        require 'layout.phtml';
+
+        require __DIR__.'/../../layout.phtml';
     }
 }
 
