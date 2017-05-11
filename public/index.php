@@ -2,13 +2,17 @@
 
 session_start();
 
-$config = require_once('../config.php');
-require_once '../MasterController.php';
+$path = realpath(__DIR__ . '/..');
+require_once $path . '/vendor/autoload.php';
+$configuration = require_once $path . '/config/config.php';
+$config = function () use ($configuration) {
+    return $configuration;
+};
 
-require_once '../Comment.php';
-require_once '../User.php';
-require_once '../Story.php';
-require_once '../Index.php';
-
-$framework = new MasterController($config);
+$container_builder = new \Aura\Di\ContainerBuilder();
+$di = $container_builder->newInstance(
+    ['config' => $config],
+    $configuration['config_classes']
+);
+$framework = $di->newInstance('Masterclass\FrontController\MasterController');
 echo $framework->execute();
