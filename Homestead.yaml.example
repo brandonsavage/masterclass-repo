@@ -1,0 +1,19 @@
+ip: 192.168.10.10
+memory: 2048
+cpus: 1
+provider: virtualbox
+authorize: ~/.ssh/id_rsa.pub
+keys:
+    - ~/.ssh/id_rsa
+folders:
+    -
+        map: /path/to/masterclass-repo
+        to: /home/vagrant/masterclass-repo
+sites:
+    -
+        map: masterclass-repo.app
+        to: /home/vagrant/masterclass-repo/public
+databases:
+    - masterclass
+name: masterclass-repo
+hostname: masterclass-repo
