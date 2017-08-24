@@ -1,35 +1,41 @@
 <?php
 
+namespace Masterclass\Controller;
+
+use Masterclass\Model\Comment as CommentModel;
+use Masterclass\Model\Story as StoryModel;
+use Masterclass\ModelLocator;
+use Masterclass\Request;
+use PDO;
+
 class Story {
-    
-    public function __construct($config) {
-        $dbconfig = $config['database'];
-        $dsn = 'mysql:host=' . $dbconfig['host'] . ';dbname=' . $dbconfig['name'];
-        $this->db = new PDO($dsn, $dbconfig['user'], $dbconfig['pass']);
-        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    public function __construct(Request $request, PDO $pdo) {
+        $this->request = $request;
+        $this->db = $pdo;
     }
     
     public function index() {
-        if(!isset($_GET['id'])) {
+        if(!$this->request->getQuery('id')) {
             header("Location: /");
             exit;
         }
-        
-        $story_sql = 'SELECT * FROM story WHERE id = ?';
-        $story_stmt = $this->db->prepare($story_sql);
-        $story_stmt->execute(array($_GET['id']));
-        if($story_stmt->rowCount() < 1) {
+
+        /** @var StoryModel $storyModel */
+        $storyModel = ModelLocator::loadModel(StoryModel::class);
+        $story = $storyModel->fetchStory($this->request->getQuery('id'));
+
+        if(!$story) {
             header("Location: /");
             exit;
         }
-        
-        $story = $story_stmt->fetch(PDO::FETCH_ASSOC);
-        
-        $comment_sql = 'SELECT * FROM comment WHERE story_id = ?';
-        $comment_stmt = $this->db->prepare($comment_sql);
-        $comment_stmt->execute(array($story['id']));
-        $comment_count = $comment_stmt->rowCount();
-        $comments = $comment_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        /** @var CommentModel $commentModel */
+        $commentModel = ModelLocator::loadModel(CommentModel::class);
+
+        $commentArr = $commentModel->findCommentsForStory($story['id']);
+        $comments = $commentArr['comments'];
+        $comment_count = $commentArr['comment_count'];
 
         $content = '
             <a class="headline" href="' . $story['url'] . '">' . $story['headline'] . '</a><br />
@@ -40,7 +46,7 @@ class Story {
         if(isset($_SESSION['AUTHENTICATED'])) {
             $content .= '
             <form method="post" action="/comment/create">
-            <input type="hidden" name="story_id" value="' . $_GET['id'] . '" />
+            <input type="hidden" name="story_id" value="' . $this->request->getQuery('id') . '" />
             <textarea cols="60" rows="6" name="comment"></textarea><br />
             <input type="submit" name="submit" value="Submit Comment" />
             </form>            
@@ -55,7 +61,7 @@ class Story {
             ';
         }
         
-        require_once 'layout.phtml';
+        require_once '../layout.phtml';
         
     }
     
@@ -66,27 +72,27 @@ class Story {
         }
         
         $error = '';
-        if(isset($_POST['create'])) {
-            if(!isset($_POST['headline']) || !isset($_POST['url']) ||
-               !filter_input(INPUT_POST, 'url', FILTER_VALIDATE_URL)) {
+        if($this->request->getPost('create')) {
+            if(!$this->request->getPost('headline') || !$this->request->getPost('url') ||
+               !filter_var($this->request->getPost('url'), FILTER_VALIDATE_URL)) {
                 $error = 'You did not fill in all the fields or the URL did not validate.';       
             } else {
-                $sql = 'INSERT INTO story (headline, url, created_by, created_on) VALUES (?, ?, ?, NOW())';
-                $stmt = $this->db->prepare($sql);
-                $stmt->execute(array(
-                   $_POST['headline'],
-                   $_POST['url'],
-                   $_SESSION['username'],
-                ));
-                
-                $id = $this->db->lastInsertId();
-                header("Location: /story/?id=$id");
+                /** @var StoryModel $storyModel */
+                $storyModel = ModelLocator::loadModel(StoryModel::class);
+
+                $id = $storyModel->createStory(
+                    $this->request->getPost('headline'),
+                    $this->request->getPost('url'),
+                    $_SESSION['username']
+                );
+
+                header("Location: /story?id=$id");
                 exit;
             }
         }
         
         $content = '
-            <form method="post">
+            <form method="post" action="/story/create/save">
                 ' . $error . '<br />
         
                 <label>Headline:</label> <input type="text" name="headline" value="" /> <br />
@@ -95,7 +101,7 @@ class Story {
             </form>
         ';
         
-        require_once 'layout.phtml';
+        require_once '../layout.phtml';
     }
     
 }

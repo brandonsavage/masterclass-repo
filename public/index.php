@@ -3,12 +3,23 @@
 session_start();
 
 $config = require_once('../config.php');
-require_once '../MasterController.php';
+require '../vendor/autoload.php';
 
-require_once '../Comment.php';
-require_once '../User.php';
-require_once '../Story.php';
-require_once '../Index.php';
+$request = new \Masterclass\Request($GLOBALS);
 
-$framework = new MasterController($config);
+$routes = [];
+
+foreach ($config['routes'] as $path => $route) {
+    if ($route['method'] == 'GET') {
+        $route = new \Masterclass\Router\Routes\GetRoute($path, $route);
+    } else {
+        $route = new \Masterclass\Router\Routes\PostRoute($path, $route);
+    }
+
+    $routes[] = $route;
+}
+
+$router = new \Masterclass\Router\Router($request, $routes);
+
+$framework = new Masterclass\MasterController($request, $router, $config);
 echo $framework->execute();
