@@ -3,6 +3,7 @@
 namespace Masterclass\Controller;
 
 use Aura\Session\Session;
+use Aura\View\View;
 use Masterclass\Model\Comment as CommentModel;
 use Masterclass\Model\Story as StoryModel;
 use Masterclass\ModelLocator;
@@ -15,12 +16,14 @@ class Story {
         StoryModel $storyModel,
         CommentModel $commentModel,
         Request $request,
-        Session $session
+        Session $session,
+        View $view
     ) {
         $this->request = $request;
         $this->storyModel = $storyModel;
         $this->commentModel = $commentModel;
         $this->session = $session;
+        $this->view = $view;
     }
     
     public function index() {
@@ -45,39 +48,25 @@ class Story {
         $comments = $commentArr['comments'];
         $comment_count = $commentArr['comment_count'];
 
-        $content = '
-            <a class="headline" href="' . $story['url'] . '">' . $story['headline'] . '</a><br />
-            <span class="details">' . $story['created_by'] . ' | ' . $comment_count . ' Comments | 
-            ' . date('n/j/Y g:i a', strtotime($story['created_on'])) . '</span>
-        ';
-
         $segment = $this->session->getSegment('Masterclass');
 
-        if($segment->get('AUTHENTICATED')) {
-            $content .= '
-            <form method="post" action="/comment/create">
-            <input type="hidden" name="story_id" value="' . $this->request->getQuery('id') . '" />
-            <textarea cols="60" rows="6" name="comment"></textarea><br />
-            <input type="submit" name="submit" value="Submit Comment" />
-            </form>            
-            ';
-        }
-        
-        foreach($comments as $comment) {
-            $content .= '
-                <div class="comment"><span class="comment_details">' . $comment['created_by'] . ' | ' .
-                date('n/j/Y g:i a', strtotime($story['created_on'])) . '</span>
-                ' . $comment['comment'] . '</div>
-            ';
-        }
-        
-        require_once '../layout.phtml';
+        $data = [
+            'story' => $story,
+            'comments' => $comments,
+            'comment_count' => $comment_count,
+            'authenticated' => $segment->get('AUTHENTICATED', false)
+        ];
+
+        $this->view->setData($data);
+        $this->view->setLayout('layout');
+        $this->view->setView('storyIndex');
+        return $this->view->__invoke();
         
     }
     
     public function create() {
         $segment = $this->session->getSegment('Masterclass');
-        if($segment->get('AUTHENTICATED')) {
+        if(!$segment->get('AUTHENTICATED')) {
             header("Location: /user/login");
             exit;
         }
@@ -101,18 +90,11 @@ class Story {
                 exit;
             }
         }
-        
-        $content = '
-            <form method="post" action="/story/create/save">
-                ' . $error . '<br />
-        
-                <label>Headline:</label> <input type="text" name="headline" value="" /> <br />
-                <label>URL:</label> <input type="text" name="url" value="" /><br />
-                <input type="submit" name="create" value="Create" />
-            </form>
-        ';
-        
-        require_once '../layout.phtml';
+
+        $this->view->setData(['errors' => $error]);
+        $this->view->setLayout('layout');
+        $this->view->setView('storyCreate');
+        return $this->view->__invoke();
     }
     
 }

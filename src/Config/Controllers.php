@@ -11,6 +11,7 @@ class Controllers extends Config
     {
         $di->params[\Masterclass\Controller\Index::class] = [
             'storyModel' => $di->lazyNew(\Masterclass\Model\Story::class),
+            'view' => $di->lazyGet('View'),
         ];
 
         $di->params[\Masterclass\Controller\Story::class] = [
@@ -18,6 +19,7 @@ class Controllers extends Config
             'commentModel' => $di->lazyNew(\Masterclass\Model\Comment::class),
             'request' => $di->lazyGet('Request'),
             'session' => $di->lazyGet('Session'),
+            'view' => $di->lazyGet('View'),
         ];
 
         $di->params[\Masterclass\Controller\Comment::class] = [

@@ -30,5 +30,6 @@ return array(
         'Masterclass\Config\Services',
         'Masterclass\Config\MasterController',
         'Masterclass\Config\Session',
+        'Masterclass\Config\View',
     ]
 );

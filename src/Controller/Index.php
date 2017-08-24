@@ -2,6 +2,7 @@
 
 namespace Masterclass\Controller;
 
+use Aura\View\View;
 use Masterclass\Model\Story as StoryModel;
 
 class Index {
@@ -11,9 +12,15 @@ class Index {
      */
     private $storyModel;
 
-    public function __construct(StoryModel $storyModel)
+    /**
+     * @var View
+     */
+    private $view;
+
+    public function __construct(StoryModel $storyModel, View $view)
     {
         $this->storyModel = $storyModel;
+        $this->view = $view;
     }
 
     public function index() {
@@ -21,23 +28,11 @@ class Index {
         /** @var StoryModel $storyModel */
         $storyModel = $this->storyModel;
         $stories = $storyModel->loadStories();
-        
-        $content = '<ol>';
-        
-        foreach($stories as $story) {
 
-            $content .= '
-                <li>
-                <a class="headline" href="' . $story['url'] . '">' . $story['headline'] . '</a><br />
-                <span class="details">' . $story['created_by'] . ' | <a href="/story?id=' . $story['id'] . '">' . $story['count'] . ' Comments</a> |
-                ' . date('n/j/Y g:i a', strtotime($story['created_on'])) . '</span>
-                </li>
-            ';
-        }
-        
-        $content .= '</ol>';
-        
-        require '../layout.phtml';
+        $this->view->setData(['stories' => $stories]);
+        $this->view->setLayout('layout');
+        $this->view->setView('index');
+        return $this->view->__invoke();
     }
 }
 

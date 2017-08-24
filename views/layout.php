@@ -57,7 +57,7 @@
                     
                 </div>
                 <div id="content">
-                    <?php echo $content; ?>
+                    <?php echo $this->getContent(); ?>
                 </div>
             </div>
         </div>
