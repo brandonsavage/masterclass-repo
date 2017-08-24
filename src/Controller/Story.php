@@ -2,6 +2,7 @@
 
 namespace Masterclass\Controller;
 
+use Aura\Session\Session;
 use Masterclass\Model\Comment as CommentModel;
 use Masterclass\Model\Story as StoryModel;
 use Masterclass\ModelLocator;
@@ -10,10 +11,16 @@ use PDO;
 
 class Story {
 
-    public function __construct(StoryModel $storyModel, CommentModel $commentModel, Request $request) {
+    public function __construct(
+        StoryModel $storyModel,
+        CommentModel $commentModel,
+        Request $request,
+        Session $session
+    ) {
         $this->request = $request;
         $this->storyModel = $storyModel;
         $this->commentModel = $commentModel;
+        $this->session = $session;
     }
     
     public function index() {
@@ -43,8 +50,10 @@ class Story {
             <span class="details">' . $story['created_by'] . ' | ' . $comment_count . ' Comments | 
             ' . date('n/j/Y g:i a', strtotime($story['created_on'])) . '</span>
         ';
-        
-        if(isset($_SESSION['AUTHENTICATED'])) {
+
+        $segment = $this->session->getSegment('Masterclass');
+
+        if($segment->get('AUTHENTICATED')) {
             $content .= '
             <form method="post" action="/comment/create">
             <input type="hidden" name="story_id" value="' . $this->request->getQuery('id') . '" />
@@ -67,7 +76,8 @@ class Story {
     }
     
     public function create() {
-        if(!isset($_SESSION['AUTHENTICATED'])) {
+        $segment = $this->session->getSegment('Masterclass');
+        if($segment->get('AUTHENTICATED')) {
             header("Location: /user/login");
             exit;
         }

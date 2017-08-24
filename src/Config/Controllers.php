@@ -17,16 +17,19 @@ class Controllers extends Config
             'storyModel' => $di->lazyNew(\Masterclass\Model\Story::class),
             'commentModel' => $di->lazyNew(\Masterclass\Model\Comment::class),
             'request' => $di->lazyGet('Request'),
+            'session' => $di->lazyGet('Session'),
         ];
 
         $di->params[\Masterclass\Controller\Comment::class] = [
             'commentModel' => $di->lazyNew(\Masterclass\Model\Comment::class),
             'request' => $di->lazyGet('Request'),
+            'session' => $di->lazyGet('Session'),
         ];
 
         $di->params[\Masterclass\Controller\User::class] = [
             'request' => $di->lazyGet('Request'),
             'pdo' => $di->lazyGet('Pdo'),
+            'session' => $di->lazyGet('Session'),
         ];
     }
 }

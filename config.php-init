@@ -29,5 +29,6 @@ return array(
         'Masterclass\Config\Controllers',
         'Masterclass\Config\Services',
         'Masterclass\Config\MasterController',
+        'Masterclass\Config\Session',
     ]
 );

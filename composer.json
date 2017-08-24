@@ -8,6 +8,8 @@
     },
 
     "require": {
-        "aura/di": "2.2.4"
+        "aura/di": "2.2.4",
+        "aura/session": "^2.1",
+        "aura/view": "^2.2"
     }
 }

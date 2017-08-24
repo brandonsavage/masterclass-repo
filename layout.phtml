@@ -47,7 +47,7 @@
                 <div id="header"><a href="/"><strong>Upvote News</strong>
                 <?php
                 
-                if(isset($_SESSION['AUTHENTICATED'])) {
+                if(\Masterclass\Template\Tools\AuthChecker::checkAuth()) {
                     print '<a href="/story/create">new</a> | <a href="/user/account">account</a> | <a href="/user/logout">logout</a>';
                 } else {
                     print '<a href="/user/login">login</a> | ';

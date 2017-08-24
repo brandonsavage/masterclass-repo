@@ -2,6 +2,7 @@
 
 namespace Masterclass\Controller;
 
+use Aura\Session\Session;
 use Masterclass\Request;
 use PDO;
 
@@ -9,7 +10,13 @@ class User {
     
     public $db;
 
-    public function __construct(Request $request, PDO $pdo) {
+    /**
+     * @var Session
+     */
+    private $session;
+
+    public function __construct(Request $request, PDO $pdo, Session $session) {
+        $this->session = $session;
         $this->db = $pdo;
     }
     
@@ -77,7 +84,10 @@ class User {
     
     public function account() {
         $error = null;
-        if(!isset($_SESSION['AUTHENTICATED'])) {
+
+        $segment = $this->session->getSegment('Masterclass');
+
+        if(!$segment->get('AUTHENTICATED')) {
             header("Location: /user/login");
             exit;
         }
@@ -91,8 +101,8 @@ class User {
                 $sql = 'UPDATE user SET password = ? WHERE username = ?';
                 $stmt = $this->db->prepare($sql);
                 $stmt->execute(array(
-                   md5($_SESSION['username'] . $_POST['password']), // THIS IS NOT SECURE. 
-                   $_SESSION['username'],
+                   md5($segment->get('username') . $_POST['password']), // THIS IS NOT SECURE.
+                   $segment->get('username'),
                 ));
                 $error = 'Your password was changed.';
             }
@@ -100,7 +110,7 @@ class User {
         
         $dsql = 'SELECT * FROM user WHERE username = ?';
         $stmt = $this->db->prepare($dsql);
-        $stmt->execute(array($_SESSION['username']));
+        $stmt->execute(array($segment->get('username')));
         $details = $stmt->fetch(PDO::FETCH_ASSOC);
         
         $content = '
@@ -131,9 +141,10 @@ class User {
             $stmt->execute(array($username, $password));
             if($stmt->rowCount() > 0) {
                $data = $stmt->fetch(PDO::FETCH_ASSOC); 
-               session_regenerate_id();
-               $_SESSION['username'] = $data['username'];
-               $_SESSION['AUTHENTICATED'] = true;
+               $this->session->regenerateId();
+               $segment = $this->session->getSegment('Masterclass');
+               $segment->set('username', $data['username']);
+               $segment->set('AUTHENTICATED', true);
                header("Location: /");
                exit;
             }
