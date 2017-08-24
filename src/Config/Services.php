@@ -48,6 +48,8 @@ class Services extends Config
             return $db;
         });
 
-        $di->set('Request', $di->lazyNew(\Masterclass\Request::class));
+        $di->set('Request', function () {
+            return \Zend\Diactoros\ServerRequestFactory::fromGlobals();
+        });
     }
 }

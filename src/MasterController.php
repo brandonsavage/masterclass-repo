@@ -5,6 +5,7 @@ namespace Masterclass;
 use Aura\Di\Container;
 use Masterclass\Router\Router;
 use PDO;
+use Zend\Diactoros\ServerRequest;
 
 class MasterController {
 
@@ -28,8 +29,7 @@ class MasterController {
      */
     protected $container;
 
-    public function __construct(Request $request, Router $router, Container $container) {
-        $this->request = $request;
+    public function __construct(Router $router, Container $container) {
         $this->router = $router;
         $this->container = $container;
     }

@@ -9,13 +9,14 @@ use Masterclass\Model\Story as StoryModel;
 use Masterclass\ModelLocator;
 use Masterclass\Request;
 use PDO;
+use Zend\Diactoros\ServerRequest;
 
 class Story {
 
     public function __construct(
         StoryModel $storyModel,
         CommentModel $commentModel,
-        Request $request,
+        ServerRequest $request,
         Session $session,
         View $view
     ) {
@@ -27,14 +28,16 @@ class Story {
     }
     
     public function index() {
-        if(!$this->request->getQuery('id')) {
+        $params = $this->request->getQueryParams();
+        if(!isset($params['id'])) {
             header("Location: /");
             exit;
         }
 
+
         /** @var StoryModel $storyModel */
         $storyModel = $this->storyModel;
-        $story = $storyModel->fetchStory($this->request->getQuery('id'));
+        $story = $storyModel->fetchStory($params['id']);
 
         if(!$story) {
             header("Location: /");
@@ -70,20 +73,24 @@ class Story {
             header("Location: /user/login");
             exit;
         }
-        
+
+        $post = $this->request->getParsedBody();
+
         $error = '';
-        if($this->request->getPost('create')) {
-            if(!$this->request->getPost('headline') || !$this->request->getPost('url') ||
-               !filter_var($this->request->getPost('url'), FILTER_VALIDATE_URL)) {
+        if(isset($post['create'])) {
+            if(!isset($post['headline']) || !isset($post['url']) ||
+               !filter_var($post['url'], FILTER_VALIDATE_URL)) {
                 $error = 'You did not fill in all the fields or the URL did not validate.';       
             } else {
                 /** @var StoryModel $storyModel */
                 $storyModel = $this->storyModel;
 
+                $segment = $this->session->getSegment('Masterclass');
+
                 $id = $storyModel->createStory(
-                    $this->request->getPost('headline'),
-                    $this->request->getPost('url'),
-                    $_SESSION['username']
+                    $post['headline'],
+                    $post['url'],
+                    $segment->get('username')
                 );
 
                 header("Location: /story?id=$id");

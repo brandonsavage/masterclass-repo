@@ -15,7 +15,7 @@ class User {
      */
     private $session;
 
-    public function __construct(Request $request, PDO $pdo, Session $session) {
+    public function __construct(PDO $pdo, Session $session) {
         $this->session = $session;
         $this->db = $pdo;
     }
