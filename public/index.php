@@ -2,7 +2,7 @@
 
 session_start();
 
-$config = require_once('../config.php');
+$config = require_once('../config/config.php');
 require '../vendor/autoload.php';
 
 // Services need to be callables.
