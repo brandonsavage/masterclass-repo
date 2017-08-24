@@ -5,21 +5,20 @@ session_start();
 $config = require_once('../config.php');
 require '../vendor/autoload.php';
 
-$request = new \Masterclass\Request($GLOBALS);
+// Services need to be callables.
+$services['config'] = function() use ($config) {
+    return $config;
+};
 
-$routes = [];
+$diContainer = new \Aura\Di\ContainerBuilder();
+$di = $diContainer->newInstance(
+    $services,
+    $config['classes'],
+    Aura\Di\ContainerBuilder::DISABLE_AUTO_RESOLVE
+);
 
-foreach ($config['routes'] as $path => $route) {
-    if ($route['method'] == 'GET') {
-        $route = new \Masterclass\Router\Routes\GetRoute($path, $route);
-    } else {
-        $route = new \Masterclass\Router\Routes\PostRoute($path, $route);
-    }
+//require '../diconfig.php';
 
-    $routes[] = $route;
-}
-
-$router = new \Masterclass\Router\Router($request, $routes);
-
-$framework = new Masterclass\MasterController($request, $router, $config);
+//$framework = $di->get(Masterclass\MasterController::class);
+$framework = $di->newInstance(Masterclass\MasterController::class);
 echo $framework->execute();

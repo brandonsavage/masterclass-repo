@@ -23,4 +23,11 @@ return array(
         '/user/login/check' =>    ['method' => 'POST', 'info' => 'Masterclass\Controller\User@login'],
         '/user/logout' =>         ['method' => 'GET', 'info' => 'Masterclass\Controller\User@logout'],
     ),
+
+    'classes' => [
+        'Masterclass\Config\Models',
+        'Masterclass\Config\Controllers',
+        'Masterclass\Config\Services',
+        'Masterclass\Config\MasterController',
+    ]
 );

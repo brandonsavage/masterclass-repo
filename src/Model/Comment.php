@@ -2,6 +2,7 @@
 
 namespace Masterclass\Model;
 
+use Masterclass\Dbal\DbalInterface;
 use PDO;
 
 class Comment
@@ -27,6 +28,7 @@ class Comment
         $comment_stmt->execute(array($storyId));
         $comment_count = $comment_stmt->rowCount();
         $comments = $comment_stmt->fetchAll(PDO::FETCH_ASSOC);
+
         return ['comments' => $comments, 'comment_count' => $comment_count];
     }
 

@@ -10,9 +10,10 @@ use PDO;
 
 class Story {
 
-    public function __construct(Request $request, PDO $pdo) {
+    public function __construct(StoryModel $storyModel, CommentModel $commentModel, Request $request) {
         $this->request = $request;
-        $this->db = $pdo;
+        $this->storyModel = $storyModel;
+        $this->commentModel = $commentModel;
     }
     
     public function index() {
@@ -22,7 +23,7 @@ class Story {
         }
 
         /** @var StoryModel $storyModel */
-        $storyModel = ModelLocator::loadModel(StoryModel::class);
+        $storyModel = $this->storyModel;
         $story = $storyModel->fetchStory($this->request->getQuery('id'));
 
         if(!$story) {
@@ -31,7 +32,7 @@ class Story {
         }
 
         /** @var CommentModel $commentModel */
-        $commentModel = ModelLocator::loadModel(CommentModel::class);
+        $commentModel = $this->commentModel;
 
         $commentArr = $commentModel->findCommentsForStory($story['id']);
         $comments = $commentArr['comments'];
@@ -78,7 +79,7 @@ class Story {
                 $error = 'You did not fill in all the fields or the URL did not validate.';       
             } else {
                 /** @var StoryModel $storyModel */
-                $storyModel = ModelLocator::loadModel(StoryModel::class);
+                $storyModel = $this->storyModel;
 
                 $id = $storyModel->createStory(
                     $this->request->getPost('headline'),

@@ -2,6 +2,7 @@
 
 namespace Masterclass;
 
+use Aura\Di\Container;
 use Masterclass\Router\Router;
 use PDO;
 
@@ -21,18 +22,23 @@ class MasterController {
      * @var array
      */
     protected $config = [];
-    
-    public function __construct(Request $request, Router $router, array $config = []) {
+
+    /**
+     * @var Container
+     */
+    protected $container;
+
+    public function __construct(Request $request, Router $router, Container $container) {
         $this->request = $request;
         $this->router = $router;
-        $this->config = $config;
+        $this->container = $container;
     }
     
     public function execute() {
         $call = $this->_determineControllers();
         $class = $call['controller'];
         $method = $call['method'];
-        $o = new $class($this->request, $this->generatePDO($this->config));
+        $o = $this->container->newInstance($class);
         return $o->$method();
     }
     
@@ -49,15 +55,5 @@ class MasterController {
         }
 
         return [];
-    }
-
-    protected function generatePDO(array $config)
-    {
-        $dbconfig = $config['database'];
-        $dsn = 'mysql:host=' . $dbconfig['host'] . ';dbname=' . $dbconfig['name'];
-        $db = new PDO($dsn, $dbconfig['user'], $dbconfig['pass']);
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        ModelLocator::setPdo($db);
-        return $db;
     }
 }

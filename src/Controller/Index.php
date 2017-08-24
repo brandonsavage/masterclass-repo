@@ -3,22 +3,23 @@
 namespace Masterclass\Controller;
 
 use Masterclass\Model\Story as StoryModel;
-use Masterclass\ModelLocator;
-use Masterclass\Request;
-use PDO;
 
 class Index {
-    
-    protected $db;
-    
-    public function __construct(Request $request, PDO $pdo) {
-        $this->db = $pdo;
+
+    /**
+     * @var StoryModel
+     */
+    private $storyModel;
+
+    public function __construct(StoryModel $storyModel)
+    {
+        $this->storyModel = $storyModel;
     }
-    
+
     public function index() {
 
         /** @var StoryModel $storyModel */
-        $storyModel = ModelLocator::loadModel(StoryModel::class);
+        $storyModel = $this->storyModel;
         $stories = $storyModel->loadStories();
         
         $content = '<ol>';
