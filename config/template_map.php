@@ -11,5 +11,8 @@ return [
         'index' => $path . '/index.php',
         'storyIndex' => $path . '/storyIndex.php',
         'storyCreate' => $path . '/storyCreate.php',
+        'userLogin' => $path . '/userLogin.php',
+        'userCreate' => $path . '/userCreate.php',
+        'userAccount' => $path . '/userAccount.php',
     ],
 ];

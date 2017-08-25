@@ -3,12 +3,13 @@
 namespace Masterclass\Controller;
 
 use Aura\View\View;
+use Masterclass\Model\Stories\StoryReadService;
 use Masterclass\Model\Story as StoryModel;
 
 class Index {
 
     /**
-     * @var StoryModel
+     * @var StoryReadService
      */
     private $storyModel;
 
@@ -17,7 +18,7 @@ class Index {
      */
     private $view;
 
-    public function __construct(StoryModel $storyModel, View $view)
+    public function __construct(StoryReadService $storyModel, View $view)
     {
         $this->storyModel = $storyModel;
         $this->view = $view;
@@ -25,9 +26,8 @@ class Index {
 
     public function index() {
 
-        /** @var StoryModel $storyModel */
         $storyModel = $this->storyModel;
-        $stories = $storyModel->loadStories();
+        $stories = $storyModel->getStories();
 
         $this->view->setData(['stories' => $stories]);
         $this->view->setLayout('layout');

@@ -5,6 +5,8 @@ namespace Masterclass\Controller;
 use Aura\Session\Session;
 use Aura\View\View;
 use Masterclass\Model\Comment as CommentModel;
+use Masterclass\Model\Stories\StoryReadService;
+use Masterclass\Model\Stories\StoryWriteService;
 use Masterclass\Model\Story as StoryModel;
 use Masterclass\ModelLocator;
 use Masterclass\Request;
@@ -14,7 +16,8 @@ use Zend\Diactoros\ServerRequest;
 class Story {
 
     public function __construct(
-        StoryModel $storyModel,
+        StoryReadService $storyModel,
+        StoryWriteService $storyWriteService,
         CommentModel $commentModel,
         ServerRequest $request,
         Session $session,
@@ -25,6 +28,7 @@ class Story {
         $this->commentModel = $commentModel;
         $this->session = $session;
         $this->view = $view;
+        $this->storyWriteService = $storyWriteService;
     }
     
     public function index() {
@@ -35,9 +39,8 @@ class Story {
         }
 
 
-        /** @var StoryModel $storyModel */
         $storyModel = $this->storyModel;
-        $story = $storyModel->fetchStory($params['id']);
+        $story = $storyModel->getStory($params['id']);
 
         if(!$story) {
             header("Location: /");
@@ -47,7 +50,7 @@ class Story {
         /** @var CommentModel $commentModel */
         $commentModel = $this->commentModel;
 
-        $commentArr = $commentModel->findCommentsForStory($story['id']);
+        $commentArr = $commentModel->findCommentsForStory($story->id);
         $comments = $commentArr['comments'];
         $comment_count = $commentArr['comment_count'];
 
@@ -82,18 +85,17 @@ class Story {
                !filter_var($post['url'], FILTER_VALIDATE_URL)) {
                 $error = 'You did not fill in all the fields or the URL did not validate.';       
             } else {
-                /** @var StoryModel $storyModel */
-                $storyModel = $this->storyModel;
+                $storyModel = $this->storyWriteService;
 
                 $segment = $this->session->getSegment('Masterclass');
 
-                $id = $storyModel->createStory(
+                $story = $storyModel->createNewStory(
                     $post['headline'],
                     $post['url'],
                     $segment->get('username')
                 );
 
-                header("Location: /story?id=$id");
+                header("Location: /story?id=$story->id");
                 exit;
             }
         }
