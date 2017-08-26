@@ -4,8 +4,67 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d0de93cd823b36fb3a6c440979b0023e",
+    "content-hash": "462c89bdcecb2684081f4f69dfbb9a0d",
     "packages": [
+        {
+            "name": "aura/accept",
+            "version": "2.2.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/auraphp/Aura.Accept.git",
+                "reference": "38d835363d424e07b35dd35f46b00b2916500ee6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/auraphp/Aura.Accept/zipball/38d835363d424e07b35dd35f46b00b2916500ee6",
+                "reference": "38d835363d424e07b35dd35f46b00b2916500ee6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "aura/di": "~2.0",
+                "phpunit/phpunit": "~5.7 || ~4.8"
+            },
+            "type": "library",
+            "extra": {
+                "aura": {
+                    "type": "library",
+                    "config": {
+                        "common": "Aura\\Accept\\_Config\\Common"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Aura\\Accept\\": "src/",
+                    "Aura\\Accept\\_Config\\": "config/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Aura.Accept Contributors",
+                    "homepage": "https://github.com/auraphp/Aura.Accept/contributors"
+                }
+            ],
+            "description": "Provides content-negotiation tools using Accept* headers.",
+            "homepage": "https://github.com/auraphp/Aura.Accept",
+            "keywords": [
+                "accept",
+                "accept-charset",
+                "accept-encoding",
+                "accept-language",
+                "content negotiation",
+                "content type",
+                "media type"
+            ],
+            "time": "2017-03-10T17:30:49+00:00"
+        },
         {
             "name": "aura/di",
             "version": "2.2.4",
@@ -117,6 +176,95 @@
                 "validator"
             ],
             "time": "2017-04-20T05:28:07+00:00"
+        },
+        {
+            "name": "aura/payload",
+            "version": "3.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/auraphp/Aura.Payload.git",
+                "reference": "0fe2dcef54a8df163e9408e7316ec4fe33c3c07e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/auraphp/Aura.Payload/zipball/0fe2dcef54a8df163e9408e7316ec4fe33c3c07e",
+                "reference": "0fe2dcef54a8df163e9408e7316ec4fe33c3c07e",
+                "shasum": ""
+            },
+            "require": {
+                "aura/payload-interface": "~3.0",
+                "php": ">=5.5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Aura\\Payload\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aura.Payload Contributors",
+                    "homepage": "https://github.com/auraphp/Aura.Payload/contributors"
+                }
+            ],
+            "description": "A Domain Payload implementation.",
+            "homepage": "https://github.com/auraphp/Aura.Payload",
+            "keywords": [
+                "ddd",
+                "domain",
+                "payload"
+            ],
+            "time": "2016-10-03T21:41:00+00:00"
+        },
+        {
+            "name": "aura/payload-interface",
+            "version": "3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/auraphp/Aura.Payload_Interface.git",
+                "reference": "c5379aa6675a0326bf16e0d43c54ef15bd4fdb1a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/auraphp/Aura.Payload_Interface/zipball/c5379aa6675a0326bf16e0d43c54ef15bd4fdb1a",
+                "reference": "c5379aa6675a0326bf16e0d43c54ef15bd4fdb1a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "pds/skeleton": "^1.0",
+                "phpunit/phpunit": "~5.7 || ~4.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Aura\\Payload_Interface\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aura.Payload_Interface Contributors",
+                    "homepage": "https://github.com/auraphp/Aura.Payload_Interface/contributors"
+                }
+            ],
+            "description": "An interface package for Domain Payload implementations.",
+            "homepage": "https://github.com/auraphp/Aura.Payload_Interface",
+            "keywords": [
+                "ddd",
+                "domain",
+                "payload"
+            ],
+            "time": "2017-07-26T15:02:59+00:00"
         },
         {
             "name": "aura/session",
@@ -239,6 +387,59 @@
                 "view"
             ],
             "time": "2017-07-21T05:15:05+00:00"
+        },
+        {
+            "name": "aura/web",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/auraphp/Aura.Web.git",
+                "reference": "6aa9f316e8d6f7f6e29577aa3c7bf4493a89bdd6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/auraphp/Aura.Web/zipball/6aa9f316e8d6f7f6e29577aa3c7bf4493a89bdd6",
+                "reference": "6aa9f316e8d6f7f6e29577aa3c7bf4493a89bdd6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "aura/di": "~2.0"
+            },
+            "type": "library",
+            "extra": {
+                "aura": {
+                    "type": "library",
+                    "config": {
+                        "common": "Aura\\Web\\_Config\\Common"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Aura\\Web\\": "src/",
+                    "Aura\\Web\\_Config\\": "config/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Aura.Web Contributors",
+                    "homepage": "https://github.com/auraphp/Aura.Web/contributors"
+                }
+            ],
+            "description": "Provides web Request and Response objects for use by web controllers and actions. These are representations of the PHP web environment, not HTTP request and response objects proper.",
+            "homepage": "https://github.com/auraphp/Aura.Web",
+            "keywords": [
+                "request",
+                "response"
+            ],
+            "time": "2017-02-09T17:05:11+00:00"
         },
         {
             "name": "modus/forms",

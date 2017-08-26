@@ -11,6 +11,7 @@ namespace Masterclass\Config;
 
 use Aura\Di\Config;
 use Aura\Di\Container;
+use Aura\Payload\PayloadFactory;
 use Masterclass\Model\Stories\StoryGateway;
 use Masterclass\Model\Stories\StoryReadService;
 use Masterclass\Model\Stories\StoryWriteService;
@@ -59,10 +60,12 @@ class Models extends Config
         // Services
         $di->params[StoryReadService::class] = [
             'gateway' => $di->lazyNew(StoryGateway::class),
+            'payloadFactory' => $di->lazyNew(PayloadFactory::class),
         ];
 
         $di->params[StoryWriteService::class] = [
             'gateway' => $di->lazyNew(StoryGateway::class),
+            'payloadFactory' => $di->lazyNew(PayloadFactory::class),
         ];
 
         $di->params[UserReadService::class] = [

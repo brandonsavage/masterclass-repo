@@ -2,6 +2,7 @@
 
 namespace Masterclass\Controller;
 
+use Aura\Payload_Interface\PayloadStatus;
 use Aura\Session\Session;
 use Aura\View\View;
 use Masterclass\Model\Comment as CommentModel;
@@ -81,23 +82,37 @@ class Story {
 
         $error = '';
         if(isset($post['create'])) {
-            if(!isset($post['headline']) || !isset($post['url']) ||
-               !filter_var($post['url'], FILTER_VALIDATE_URL)) {
-                $error = 'You did not fill in all the fields or the URL did not validate.';       
-            } else {
-                $storyModel = $this->storyWriteService;
+            $storyModel = $this->storyWriteService;
 
-                $segment = $this->session->getSegment('Masterclass');
+            $segment = $this->session->getSegment('Masterclass');
 
-                $story = $storyModel->createNewStory(
-                    $post['headline'],
-                    $post['url'],
-                    $segment->get('username')
-                );
+            $payload = $storyModel->createNewStory(
+                $post['headline'],
+                $post['url'],
+                $segment->get('username')
+            );
+
+            if ($payload->getStatus() == PayloadStatus::CREATED) {
+                $story = $payload->getOutput();
 
                 header("Location: /story?id=$story->id");
                 exit;
             }
+        }
+
+        $reason = $payload->getStatus();
+        $messages = $payload->getOutput();
+
+        if ($reason == PayloadStatus::NOT_VALID) {
+            // Yes, we are intentionally nesting foreach loops. This will always be
+            // a small dataset.
+            foreach ($messages as $message) {
+                foreach ($message as $messageSpecific) {
+                    $error .= $messageSpecific . '<br />';
+                }
+            }
+        } else if ($reason == PayloadStatus::ERROR) {
+            $error = $messages->getMessage();
         }
 
         $this->view->setData(['errors' => $error]);

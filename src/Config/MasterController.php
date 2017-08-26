@@ -11,13 +11,14 @@ namespace Masterclass\Config;
 
 use Aura\Di\Config;
 use Aura\Di\Container;
+use Masterclass\Responder\ResponseManager;
 
 class MasterController extends Config
 {
     public function define(Container $di)
     {
         $di->params[\Masterclass\MasterController::class] = [
-            'request' => $di->lazyGet('Request'),
+            'responseManager' => $di->lazyNew(ResponseManager::class),
             'router' => $di->lazyGet('Router'),
             'container' => $di,
         ];

@@ -2,6 +2,8 @@
 
 namespace Masterclass\Model\Stories;
 
+use Aura\Payload\PayloadFactory;
+use Aura\Payload_Interface\PayloadStatus;
 use Masterclass\Model\Stories\Exceptions\StoryIdNotInteger;
 
 class StoryReadService
@@ -10,16 +12,24 @@ class StoryReadService
      * @var StoryGateway
      */
     private $gateway;
+    /**
+     * @var PayloadFactory
+     */
+    private $payloadFactory;
 
-    public function __construct(StoryGateway $gateway)
+    public function __construct(StoryGateway $gateway, PayloadFactory $payloadFactory)
     {
 
         $this->gateway = $gateway;
+        $this->payloadFactory = $payloadFactory;
     }
 
     public function getStories()
     {
-        return $this->gateway->loadStories();
+        $payload = $this->payloadFactory->newInstance();
+        $stories = $this->gateway->loadStories();
+        $payload->setStatus(PayloadStatus::FOUND)->setOutput($stories);
+        return $payload;
     }
 
     public function getStory($id)

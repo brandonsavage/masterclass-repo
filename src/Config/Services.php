@@ -11,6 +11,7 @@ namespace Masterclass\Config;
 
 use Aura\Di\Config;
 use Aura\Di\Container;
+use Aura\Web\Response;
 use PDO;
 
 class Services extends Config
@@ -51,5 +52,7 @@ class Services extends Config
         $di->set('Request', function () {
             return \Zend\Diactoros\ServerRequestFactory::fromGlobals();
         });
+
+        $di->set('Response', $di->lazyNew(Response::class));
     }
 }

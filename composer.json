@@ -12,6 +12,9 @@
         "aura/session": "^2.1",
         "aura/view": "^2.2",
         "zendframework/zend-diactoros": "^1.5",
-        "modus/forms": "^2.0"
+        "modus/forms": "^2.0",
+        "aura/accept": "^2.2",
+        "aura/web": "^2.1",
+        "aura/payload": "^3.0"
     }
 }

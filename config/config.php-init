@@ -10,7 +10,13 @@ return array(
     ),
 
     'routes' => array(
-        '/' =>                    ['method' => 'GET', 'info' => 'Masterclass\Controller\Index@index'],
+        '/' =>                    [
+            'method' => 'GET',
+            'info' => [
+                'action' => 'Masterclass\Action\IndexAction@index',
+                'responder' => 'Masterclass\Responder\IndexResponder',
+            ]
+        ],
         '/story' =>               ['method' => 'GET', 'info' => 'Masterclass\Controller\Story@index'],
         '/story/create' =>        ['method' => 'GET', 'info' => 'Masterclass\Controller\Story@create'],
         '/story/create/save' =>   ['method' => 'POST', 'info' => 'Masterclass\Controller\Story@create'],
@@ -31,5 +37,9 @@ return array(
         'Masterclass\Config\MasterController',
         'Masterclass\Config\Session',
         'Masterclass\Config\View',
+        'Masterclass\Config\Accept',
+        'Masterclass\Config\Web',
+        'Masterclass\Config\Actions',
+        'Masterclass\Config\Responders',
     ]
 );
