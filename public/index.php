@@ -3,6 +3,11 @@
 session_start();
 
 $config = require_once('../config/config.php');
+
+// We add to $config here
+require_once('../config/commands.php');
+require_once('../config/events.php');
+
 require '../vendor/autoload.php';
 
 // Services need to be callables.

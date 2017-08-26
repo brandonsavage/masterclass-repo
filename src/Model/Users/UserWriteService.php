@@ -9,6 +9,8 @@
 namespace Masterclass\Model\Users;
 
 
+use Masterclass\Command\CommandBus;
+use Masterclass\Command\Commands\CreateUser;
 use Masterclass\Forms\ChangePasswordForm;
 use Masterclass\Forms\FormFactory;
 use Masterclass\Forms\UserCreateForm;
@@ -19,11 +21,16 @@ class UserWriteService
      * @var UserGateway
      */
     private $gateway;
+    /**
+     * @var CommandBus
+     */
+    private $commandBus;
 
-    public function __construct(UserGateway $gateway)
+    public function __construct(UserGateway $gateway, CommandBus $commandBus)
     {
 
         $this->gateway = $gateway;
+        $this->commandBus = $commandBus;
     }
 
     public function createUser($username, $password, $password_verify, $email)
@@ -42,11 +49,21 @@ class UserWriteService
             return;
         }
 
-        $this->gateway->createUser(
+//        $this->gateway->createUser(
+//            $form->getValue('username'),
+//            $form->getValue('password'),
+//            $form->getValue('email')
+//        );
+
+        $createUser = new CreateUser(
             $form->getValue('username'),
             $form->getValue('password'),
             $form->getValue('email')
         );
+
+        $this->commandBus->perform($createUser);
+
+
     }
 
     public function changePassword($username, $password, $password_verify)

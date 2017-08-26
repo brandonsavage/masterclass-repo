@@ -75,6 +75,7 @@ class Models extends Config
 
         $di->params[UserWriteService::class] = [
             'gateway' => $di->lazyNew(UserGateway::class),
+            'commandBus' => $di->lazyGet('CommandBus'),
         ];
     }
 }

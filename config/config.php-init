@@ -41,5 +41,7 @@ return array(
         'Masterclass\Config\Web',
         'Masterclass\Config\Actions',
         'Masterclass\Config\Responders',
+        'Masterclass\Config\Events',
+        'Masterclass\Config\Commands',
     ]
 );
